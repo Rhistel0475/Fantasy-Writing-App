@@ -37,6 +37,7 @@ const buildBeatCards = () => {
       card.innerHTML = `
         <h4>Beat ${beat} <small>${movement.name}</small></h4>
         <label>Quest Strand
+ codex/start-project-initialization
           <textarea name="beat${beat}Quest" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Example: Quest beat ${beat}..."></textarea>
         </label>
         <label>Fire Strand
@@ -44,6 +45,15 @@ const buildBeatCards = () => {
         </label>
         <label>Constellation Strand
           <textarea name="beat${beat}Constellation" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Example: Constellation beat ${beat}..."></textarea>
+
+          <textarea name="beat${beat}Quest" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Quest beat ${beat}..."></textarea>
+        </label>
+        <label>Fire Strand
+          <textarea name="beat${beat}Fire" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Fire beat ${beat}..."></textarea>
+        </label>
+        <label>Constellation Strand
+          <textarea name="beat${beat}Constellation" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Constellation beat ${beat}..."></textarea>
+ main
         </label>
       `;
       beatsGrid.appendChild(card);

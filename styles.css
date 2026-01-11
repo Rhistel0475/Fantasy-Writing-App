@@ -185,8 +185,7 @@ label {
 }
 
 input,
-textarea,
-select {
+textarea {
   width: 100%;
   background: var(--panel-light);
   border: 1px solid var(--border);
