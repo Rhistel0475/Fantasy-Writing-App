@@ -21,42 +21,19 @@ body {
   color: var(--text);
 }
 
-.drawer-overlay {
-  display: none;
-}
-
-.sidebar-open .drawer-overlay {
-  display: block;
-  position: fixed;
-  inset: 0;
-  background: rgba(6, 8, 12, 0.7);
-  z-index: 30;
-}
-
-.app-shell {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  min-height: 100dvh;
-}
-
-.main-area {
-  display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
-  overflow: hidden;
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
 }
 
 .app-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
   display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 24px 32px;
-  background: rgba(12, 15, 22, 0.9);
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
 }
 
 .eyebrow {
@@ -79,50 +56,18 @@ h1 {
 }
 
 .status-card {
-  display: grid;
-  gap: 12px;
-}
-
-.header-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.header-label {
-  margin: 0;
-  font-size: 12px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-}
-
-#project-name {
-  margin: 4px 0 0;
-  font-size: 22px;
-}
-
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  background: transparent;
+  background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 8px;
-  cursor: pointer;
-}
-
-.menu-toggle span {
-  width: 18px;
-  height: 2px;
-  background: var(--text);
-  display: block;
+  border-radius: 16px;
+  padding: 16px;
+  min-width: 240px;
 }
 
 .status-row {
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
+  margin-bottom: 12px;
   color: var(--muted);
   font-size: 14px;
 }
@@ -149,21 +94,24 @@ h1 {
   transition: width 0.2s ease;
 }
 
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+
 .sidebar {
-  padding: 32px 24px;
-  border-right: 1px solid var(--border);
-  background: rgba(12, 15, 22, 0.95);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  position: sticky;
+  top: 24px;
+  align-self: start;
 }
 
-.sidebar-header {
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
+.sidebar h2 {
+  margin-top: 0;
 }
 
-.nav {
+nav {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -187,6 +135,14 @@ h1 {
   background: rgba(249, 115, 22, 0.12);
 }
 
+.tip-card {
+  margin-top: 24px;
+  background: var(--panel);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
 .tip-card ul {
   margin: 12px 0 0;
   padding-left: 20px;
@@ -194,13 +150,10 @@ h1 {
 }
 
 .content {
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  overflow-y: auto;
-  min-height: 0;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 96px);
+  background: var(--panel);
+  border-radius: 24px;
+  padding: 24px;
+  border: 1px solid var(--border);
 }
 
 .step {
@@ -223,36 +176,6 @@ h1 {
   }
 }
 
-.card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px;
-  backdrop-filter: blur(12px);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  gap: 16px;
-}
-
-.helper-text {
-  color: var(--muted);
-  font-size: 13px;
-  margin: 0;
-}
-
-.field {
-  display: grid;
-  gap: 8px;
-  margin-bottom: 16px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
 label {
   display: grid;
   gap: 8px;
@@ -262,8 +185,7 @@ label {
 }
 
 input,
-textarea,
-select {
+textarea {
   width: 100%;
   background: var(--panel-light);
   border: 1px solid var(--border);
@@ -365,18 +287,15 @@ textarea {
 }
 
 .ai-section {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-}
-
-.ai-section > div {
-  flex: 1;
-}
-
-.ai-section button {
-  min-width: 180px;
 }
 
 .ai-output {
@@ -423,70 +342,6 @@ textarea {
   margin-bottom: 16px;
 }
 
-.ghost {
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-}
-
-.ghost:hover {
-  border-color: var(--accent);
-  color: var(--text);
-}
-
-.danger {
-  border: none;
-  background: #ef4444;
-  color: #fff;
-}
-
-.danger:hover {
-  background: #dc2626;
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(6, 8, 12, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 50;
-}
-
-.modal.show {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.modal-card {
-  background: var(--panel);
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  padding: 24px;
-  max-width: 420px;
-  width: min(90vw, 420px);
-  text-align: left;
-}
-
-.modal-card h3 {
-  margin-top: 0;
-}
-
-.modal-card p {
-  color: var(--muted);
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 20px;
-}
-
 .mercy-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -494,45 +349,18 @@ textarea {
 }
 
 @media (max-width: 1024px) {
-  .app-shell {
+  .layout {
     grid-template-columns: 1fr;
   }
 
   .sidebar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    width: min(320px, 85vw);
-    transform: translateX(-100%);
-    transition: transform 0.2s ease;
-    z-index: 40;
-  }
-
-  .sidebar-open .sidebar {
-    transform: translateX(0);
-  }
-
-  .menu-toggle {
-    display: flex;
+    position: static;
   }
 }
 
 @media (max-width: 720px) {
   .app-header {
     flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .status-card {
-    width: 100%;
-  }
-
-  .ai-section {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .ai-section button {
-    width: 100%;
   }
 
   .wizard-controls {
