@@ -1,243 +1,250 @@
-const steps = Array.from(document.querySelectorAll('.step'));
-const navItems = Array.from(document.querySelectorAll('.nav-item'));
-const nextButton = document.getElementById('next-step');
-const prevButton = document.getElementById('prev-step');
-const progressBar = document.getElementById('progress-bar');
-const progressValue = document.getElementById('progress-value');
-const exportButton = document.getElementById('export-json');
-const downloadButton = document.getElementById('download-json');
-const exportOutput = document.getElementById('export-output');
-const phaseSelect = document.getElementById('project-phase');
+const STORAGE_KEY = "crucible.project.v1";
 
-const STORAGE_KEY = 'crucibleWriterData';
+function safeParse(json, fallback) {
+  try {
+    return JSON.parse(json);
+  } catch {
+    return fallback;
+  }
+}
 
-const movements = [
-  { name: 'Ignition', range: '1-6', beats: [1, 2, 3, 4, 5, 6] },
-  { name: 'First Tempering', range: '7-11', beats: [7, 8, 9, 10, 11] },
-  { name: 'Scattering', range: '12-18', beats: [12, 13, 14, 15, 16, 17, 18] },
-  { name: 'Brightest Burning', range: '19-27', beats: [19, 20, 21, 22, 23, 24, 25, 26, 27] },
-  { name: 'Final Forging', range: '28-33', beats: [28, 29, 30, 31, 32, 33] },
-  { name: 'Tempered Blade', range: '34-36', beats: [34, 35, 36] },
-];
+function getDefaultProject() {
+  return {
+    projectPhase: "Planning",
+    author: "",
+    title: "",
+    genre: "",
+    targetWordCount: 90000,
 
-const state = {
-  currentStep: 0,
-  data: {},
-};
+    mercyPlanted: "",
+    mercyBrewing: "",
+    mercyPaid: "",
 
-const beatsGrid = document.getElementById('beats-grid');
+    chapterCount: "",
+    chapterWords: "",
+    chapterNotes: "",
+  };
+}
 
-const buildBeatCards = () => {
-  beatsGrid.innerHTML = '';
-  movements.forEach((movement) => {
-    movement.beats.forEach((beat) => {
-      const card = document.createElement('div');
-      card.className = 'beat-card';
-      card.dataset.movement = movement.name;
-      card.innerHTML = `
-        <h4>Beat ${beat} <small>${movement.name}</small></h4>
-        <label>Quest Strand
- codex/start-project-initialization
-          <textarea name="beat${beat}Quest" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Example: Quest beat ${beat}..."></textarea>
-        </label>
-        <label>Fire Strand
-          <textarea name="beat${beat}Fire" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Example: Fire beat ${beat}..."></textarea>
-        </label>
-        <label>Constellation Strand
-          <textarea name="beat${beat}Constellation" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Example: Constellation beat ${beat}..."></textarea>
+function loadProject() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  const p = raw ? safeParse(raw, null) : null;
+  return p && typeof p === "object" ? { ...getDefaultProject(), ...p } : getDefaultProject();
+}
 
-          <textarea name="beat${beat}Quest" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Quest beat ${beat}..."></textarea>
-        </label>
-        <label>Fire Strand
-          <textarea name="beat${beat}Fire" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Fire beat ${beat}..."></textarea>
-        </label>
-        <label>Constellation Strand
-          <textarea name="beat${beat}Constellation" rows="2" ${beat === 1 ? 'data-required="true"' : ''} placeholder="Constellation beat ${beat}..."></textarea>
- main
-        </label>
-      `;
-      beatsGrid.appendChild(card);
-    });
-  });
-};
+function saveProject(project) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+}
 
-const loadState = () => {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) {
+function qs(sel, root = document) {
+  return root.querySelector(sel);
+}
+function qsa(sel, root = document) {
+  return Array.from(root.querySelectorAll(sel));
+}
+
+function getAllFields() {
+  return qsa("input[name], textarea[name], select[name]");
+}
+
+function setFieldValue(el, value) {
+  if (el.tagName === "SELECT") {
+    el.value = value ?? "";
     return;
   }
-  const parsed = JSON.parse(saved);
-  state.data = parsed.data || {};
-  state.currentStep = parsed.currentStep ?? 0;
-  Object.entries(state.data).forEach(([key, value]) => {
-    const input = document.querySelector(`[name="${key}"]`);
-    if (!input) {
-      return;
-    }
-    if (input.type === 'checkbox') {
-      input.checked = Boolean(value);
-    } else {
-      input.value = value;
-    }
-  });
-  if (parsed.projectPhase) {
-    phaseSelect.value = parsed.projectPhase;
-  }
-};
-
-const saveState = () => {
-  const payload = {
-    currentStep: state.currentStep,
-    data: state.data,
-    projectPhase: phaseSelect.value,
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-};
-
-const updateProgress = () => {
-  const requiredInputs = document.querySelectorAll('[data-required="true"]');
-  const total = requiredInputs.length;
-  const filled = Array.from(requiredInputs).filter((input) => input.value.trim().length > 0).length;
-  const percent = total === 0 ? 0 : Math.round((filled / total) * 100);
-  progressBar.style.width = `${percent}%`;
-  progressValue.textContent = `${percent}%`;
-};
-
-const validateStep = (index) => {
-  const step = steps[index];
-  const required = Array.from(step.querySelectorAll('[data-required="true"]'));
-  return required.every((input) => input.value.trim().length > 0);
-};
-
-const showStep = (index) => {
-  state.currentStep = index;
-  steps.forEach((step) => step.classList.remove('active'));
-  navItems.forEach((item) => item.classList.remove('active'));
-  steps[index].classList.add('active');
-  navItems[index].classList.add('active');
-  prevButton.disabled = index === 0;
-  nextButton.textContent = index === steps.length - 1 ? 'Finish' : 'Next Step';
-  updateProgress();
-  saveState();
-};
-
-const updateData = (event) => {
-  const { name, type } = event.target;
-  if (!name) {
+  if (el.type === "number") {
+    el.value = value === undefined || value === null ? "" : String(value);
     return;
   }
-  if (type === 'checkbox') {
-    state.data[name] = event.target.checked;
-  } else {
-    state.data[name] = event.target.value;
+  el.value = value ?? "";
+}
+
+function getFieldValue(el) {
+  if (el.tagName === "SELECT") return el.value;
+  if (el.type === "number") return el.value; // keep as string for now
+  return el.value;
+}
+
+function computeCompletion(project) {
+  // Very simple: count required fields filled + some important optional ones
+  const requiredKeys = ["author", "title", "genre"];
+  const optionalKeys = ["targetWordCount", "mercyPlanted", "mercyBrewing", "mercyPaid"];
+
+  let filled = 0;
+  let total = requiredKeys.length + optionalKeys.length;
+
+  for (const k of requiredKeys) {
+    if ((project[k] ?? "").toString().trim().length > 0) filled++;
   }
-  saveState();
-  updateProgress();
-};
-
-const filterBeats = (movementName) => {
-  const cards = Array.from(document.querySelectorAll('.beat-card'));
-  cards.forEach((card) => {
-    card.style.display = card.dataset.movement === movementName ? 'block' : 'none';
-  });
-};
-
-const initMovementSelector = () => {
-  const pills = Array.from(document.querySelectorAll('.pill'));
-  pills.forEach((pill) => {
-    pill.addEventListener('click', () => {
-      pills.forEach((button) => button.classList.remove('active'));
-      pill.classList.add('active');
-      filterBeats(pill.dataset.movement);
-    });
-  });
-  filterBeats('Ignition');
-};
-
-const fillAiPrompt = (template) => {
-  return template.replace(/\{(.*?)\}/g, (_, key) => {
-    const value = state.data[key];
-    if (typeof value === 'boolean') {
-      return value ? 'complete' : 'pending';
-    }
-    return value ? value : '[add detail]';
-  });
-};
-
-const wireAiButtons = () => {
-  document.querySelectorAll('[data-ai="generate"]').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      const container = event.target.closest('.step');
-      const aiSection = container.querySelector('.ai-section');
-      const output = container.querySelector('[data-ai-output]');
-      const template = aiSection.dataset.prompt;
-      const prompt = fillAiPrompt(template);
-      output.textContent = prompt;
-    });
-  });
-};
-
-const generateExport = () => {
-  const data = {
-    ...state.data,
-    projectPhase: phaseSelect.value,
-    exportedAt: new Date().toISOString(),
-  };
-  exportOutput.value = JSON.stringify(data, null, 2);
-};
-
-const downloadExport = () => {
-  if (!exportOutput.value) {
-    generateExport();
+  for (const k of optionalKeys) {
+    const v = project[k];
+    if (v === 0) filled++;
+    else if ((v ?? "").toString().trim().length > 0) filled++;
   }
-  const blob = new Blob([exportOutput.value], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `${state.data.title || 'crucible-project'}-backup.json`;
-  link.click();
-  URL.revokeObjectURL(url);
-};
 
-const bindNavigation = () => {
-  navItems.forEach((item) => {
-    item.addEventListener('click', () => {
-      showStep(Number(item.dataset.step));
+  const pct = total === 0 ? 0 : Math.round((filled / total) * 100);
+  return Math.max(0, Math.min(100, pct));
+}
+
+function updateProgressUI(project) {
+  const pct = computeCompletion(project);
+  const bar = qs("#progress-bar");
+  const val = qs("#progress-value");
+  if (bar) bar.style.width = pct + "%";
+  if (val) val.textContent = pct + "%";
+}
+
+function showStep(stepIndex) {
+  const steps = qsa(".step");
+  const nav = qsa(".nav-item");
+
+  steps.forEach((s) => s.classList.remove("active"));
+  nav.forEach((n) => n.classList.remove("active"));
+
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  const navEl = qs(`.nav-item[data-step="${stepIndex}"]`);
+
+  if (stepEl) stepEl.classList.add("active");
+  if (navEl) navEl.classList.add("active");
+}
+
+function fillTemplate(template, project) {
+  return template.replace(/\{(\w+)\}/g, (_, key) => {
+    const v = project[key];
+    return v === undefined || v === null ? "" : String(v);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  let project = loadProject();
+
+  // Phase selector
+  const phaseSelect = qs("#project-phase");
+  if (phaseSelect) {
+    phaseSelect.value = project.projectPhase || "Planning";
+    phaseSelect.addEventListener("change", () => {
+      project.projectPhase = phaseSelect.value;
+      saveProject(project);
+    });
+  }
+
+  // Populate all fields
+  getAllFields().forEach((el) => {
+    setFieldValue(el, project[el.name]);
+  });
+
+  updateProgressUI(project);
+
+  // Save on change
+  getAllFields().forEach((el) => {
+    const evt = el.tagName === "SELECT" ? "change" : "input";
+    el.addEventListener(evt, () => {
+      project[el.name] = getFieldValue(el);
+      saveProject(project);
+      updateProgressUI(project);
     });
   });
 
-  nextButton.addEventListener('click', () => {
-    if (!validateStep(state.currentStep)) {
-      nextButton.classList.add('shake');
-      setTimeout(() => nextButton.classList.remove('shake'), 300);
-      return;
-    }
-    if (state.currentStep < steps.length - 1) {
-      showStep(state.currentStep + 1);
-    }
+  // Sidebar nav buttons
+  qsa(".nav-item").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.getAttribute("data-step") || "0");
+      showStep(idx);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
   });
 
-  prevButton.addEventListener('click', () => {
-    if (state.currentStep > 0) {
-      showStep(state.currentStep - 1);
-    }
+  // Next/Back buttons
+  const prevBtn = qs("#prev-step");
+  const nextBtn = qs("#next-step");
+
+  function getActiveStepIndex() {
+    const active = qs(".step.active");
+    if (!active) return 0;
+    return Number(active.getAttribute("data-step") || "0");
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      const current = getActiveStepIndex();
+      const next = Math.max(0, current - 1);
+      showStep(next);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      const current = getActiveStepIndex();
+      const next = Math.min(8, current + 1);
+      showStep(next);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  // AI Guidance (display prompt)
+  qsa('[data-ai="generate"]').forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const section = btn.closest(".ai-section");
+      if (!section) return;
+
+      // Refresh project from fields right before generating
+      getAllFields().forEach((el) => {
+        project[el.name] = getFieldValue(el);
+      });
+      saveProject(project);
+      updateProgressUI(project);
+
+      const template = section.getAttribute("data-prompt") || "";
+      const prompt = fillTemplate(template, project);
+
+      // Find the output area after this section
+      const output = section.parentElement.querySelector("[data-ai-output]");
+      if (output) {
+        output.textContent = prompt;
+      }
+    });
   });
-};
 
-const bindInputs = () => {
-  document.querySelectorAll('input, textarea, select').forEach((input) => {
-    input.addEventListener('input', updateData);
-  });
-};
+  // Export JSON
+  const exportBtn = qs("#export-json");
+  const downloadBtn = qs("#download-json");
+  const exportOut = qs("#export-output");
 
-buildBeatCards();
-loadState();
-initMovementSelector();
-wireAiButtons();
-bindNavigation();
-bindInputs();
-showStep(state.currentStep);
+  function getProjectSnapshot() {
+    // Ensure latest values
+    getAllFields().forEach((el) => {
+      project[el.name] = getFieldValue(el);
+    });
+    if (phaseSelect) project.projectPhase = phaseSelect.value;
+    saveProject(project);
+    return project;
+  }
 
-exportButton.addEventListener('click', generateExport);
-downloadButton.addEventListener('click', downloadExport);
-phaseSelect.addEventListener('change', saveState);
+  if (exportBtn && exportOut) {
+    exportBtn.addEventListener("click", () => {
+      const snapshot = getProjectSnapshot();
+      exportOut.value = JSON.stringify(snapshot, null, 2);
+    });
+  }
+
+  if (downloadBtn && exportOut) {
+    downloadBtn.addEventListener("click", () => {
+      const snapshot = getProjectSnapshot();
+      const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${(snapshot.title || "crucible-project").replace(/[^\w\-]+/g, "_")}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // Start at step 0
+  showStep(0);
+});
