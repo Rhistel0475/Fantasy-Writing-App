@@ -6,6 +6,7 @@
     <title>Crucible Writer</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
+
   <body>
     <div class="app">
       <header class="app-header">
@@ -65,34 +66,41 @@
         </aside>
 
         <section class="content">
-          <!-- STEP 0: PROJECT FORGE -->
+          <!-- STEP 0 -->
           <div class="step active" data-step="0">
             <h2>Project Forge</h2>
             <p>Set the foundation for your Crucible project.</p>
 
-            <!-- BASICS (RESTORED) -->
             <div class="grid two">
               <label>
-                Author
-                <input name="author" data-required="true" placeholder="e.g., S. B. Smith" />
+                Project Title
+                <input
+                  name="title"
+                  data-required="true"
+                  placeholder="The Ember Crown"
+                />
               </label>
 
               <label>
-                Project Title
-                <input name="title" data-required="true" placeholder="e.g., The Ashes of Elarion" />
+                Author
+                <input
+                  name="author"
+                  placeholder="Your name"
+                />
               </label>
 
               <label>
                 Genre
-                <select name="genre" data-required="true">
-                  <option value="" selected disabled>Select a genre</option>
+                <select name="genre">
+                  <option value="">Select a genre...</option>
                   <option>Epic Fantasy</option>
-                  <option>Urban Fantasy</option>
                   <option>Dark Fantasy</option>
+                  <option>Grimdark</option>
+                  <option>Urban Fantasy</option>
+                  <option>Romantasy</option>
+                  <option>Sword & Sorcery</option>
+                  <option>Mythic Fantasy</option>
                   <option>Cozy Fantasy</option>
-                  <option>Sword &amp; Sorcery</option>
-                  <option>Romantic Fantasy</option>
-                  <option>YA Fantasy</option>
                   <option>Progression Fantasy</option>
                   <option>LitRPG</option>
                   <option>Other</option>
@@ -102,36 +110,88 @@
               <label>
                 Target Word Count
                 <input
-                  name="targetWordCount"
+                  name="wordCount"
                   type="number"
-                  min="0"
-                  step="1000"
+                  inputmode="numeric"
                   placeholder="90000"
                 />
               </label>
             </div>
 
-            <!-- MERCY (KEPT) -->
-            <div class="grid two" style="margin-top: 12px;">
+            <div class="grid two">
+              <label>
+                Logline / Premise
+                <textarea
+                  name="premise"
+                  placeholder="In one sentence, what is your story about?"
+                  rows="3"
+                ></textarea>
+              </label>
+
+              <label>
+                Theme
+                <textarea
+                  name="theme"
+                  placeholder="What truth will the story explore?"
+                  rows="3"
+                ></textarea>
+              </label>
+            </div>
+
+            <div class="ai-section"
+              data-prompt="Project: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Target words: {wordCount}. Suggest 3 strong story directions and 3 core conflicts that fit the Crucible system."
+            >
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Get strong options for conflict + direction.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <!-- STEP 6 (Mercy Engine) -->
+          <div class="step" data-step="6">
+            <h2>Mercy Engine</h2>
+            <p>Plant mercy early, let it echo, then pay it off later.</p>
+
+            <div class="grid two">
               <label>
                 Mercy Planted (Early)
-                <input name="mercyPlanted" placeholder="Who receives mercy early?" />
+                <input
+                  name="mercyPlanted"
+                  data-required="true"
+                  placeholder="Who receives mercy early?"
+                />
               </label>
 
               <label>
                 Mercy Brewing
-                <input name="mercyBrewing" placeholder="How does it echo?" />
+                <input
+                  name="mercyBrewing"
+                  placeholder="How does it echo?"
+                />
               </label>
 
               <label>
                 Mercy Paid Off
-                <input name="mercyPaid" placeholder="When does it return?" />
+                <input
+                  name="mercyPaid"
+                  placeholder="When does it return?"
+                />
+              </label>
+
+              <label>
+                Mercy Notes
+                <input
+                  name="mercyNotes"
+                  placeholder="Optional: why does this matter?"
+                />
               </label>
             </div>
 
-            <div
-              class="ai-section"
-              data-prompt="Project: {title} ({genre}) by {author}. Mercy planted: {mercyPlanted}. Brewing: {mercyBrewing}. Paid off: {mercyPaid}. Suggest a beat to link this mercy payoff to a forge point."
+            <div class="ai-section"
+              data-prompt="Mercy planted: {mercyPlanted}. Brewing: {mercyBrewing}. Paid off: {mercyPaid}. Notes: {mercyNotes}. Suggest a beat that links this mercy payoff to a forge point, and propose 2 alternative payoffs."
             >
               <div>
                 <h3>AI Guidance</h3>
@@ -142,7 +202,7 @@
             <div class="ai-output" data-ai-output></div>
           </div>
 
-          <!-- STEP 7: CHAPTERS -->
+          <!-- STEP 7 -->
           <div class="step" data-step="7">
             <h2>Chapter Outline</h2>
             <p>Create a chapter path linked to beats.</p>
@@ -150,11 +210,21 @@
             <div class="grid two">
               <label>
                 Chapter Count Target
-                <input name="chapterCount" type="number" data-required="true" placeholder="45" />
+                <input
+                  name="chapterCount"
+                  type="number"
+                  data-required="true"
+                  placeholder="45"
+                />
               </label>
+
               <label>
                 Average Word Count
-                <input name="chapterWords" type="number" placeholder="3500" />
+                <input
+                  name="chapterWords"
+                  type="number"
+                  placeholder="3500"
+                />
               </label>
             </div>
 
@@ -167,8 +237,7 @@
               ></textarea>
             </label>
 
-            <div
-              class="ai-section"
+            <div class="ai-section"
               data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing."
             >
               <div>
@@ -180,7 +249,7 @@
             <div class="ai-output" data-ai-output></div>
           </div>
 
-          <!-- STEP 8: EXPORT -->
+          <!-- STEP 8 -->
           <div class="step" data-step="8">
             <h2>Export & Backup</h2>
             <p>Export your Crucible project as JSON for safekeeping.</p>
@@ -192,9 +261,8 @@
 
             <textarea id="export-output" rows="10" readonly></textarea>
 
-            <div
-              class="ai-section"
-              data-prompt="Summarize this Crucible project for a writing partner: {title} by {author}, genre {genre}, target words {targetWordCount}, mercy {mercyPlanted}/{mercyBrewing}/{mercyPaid}."
+            <div class="ai-section"
+              data-prompt="Summarize this Crucible project for a writing partner: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Mercy: {mercyPlanted} -> {mercyPaid}. Target words: {wordCount}."
             >
               <div>
                 <h3>AI Guidance</h3>
