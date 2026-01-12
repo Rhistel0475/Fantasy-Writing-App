@@ -388,4 +388,84 @@ textarea {
   100% {
     transform: translateX(0);
   }
+}select {
+  width: 100%;
+  background: var(--panel-light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--text);
+  font-size: 14px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select:focus,
+input:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+  border-color: rgba(245, 176, 76, 0.55);
+  box-shadow: 0 0 0 3px rgba(245, 176, 76, 0.12);
+}
+
+label select {
+  cursor: pointer;
+}.content,
+.status-card,
+.tip-card,
+.strand,
+.beat-card,
+.forge-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(245,176,76,0.08), transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(249,115,22,0.05), transparent 60%),
+    radial-gradient(circle at 50% 50%, transparent 35%, rgba(0,0,0,0.55) 90%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}.primary {
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  color: #0b0c10;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 12px 24px rgba(249,115,22,0.18);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.secondary {
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.secondary:hover {
+  transform: translateY(-1px);
+  border-color: rgba(245,176,76,0.35);
+}.app {
+  padding: 32px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+}
+
+@media (max-width: 720px) {
+  .app {
+    padding: 18px;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+}.ai-section {
+  background: linear-gradient(180deg, rgba(249,115,22,0.10), rgba(249,115,22,0.06));
+  border: 1px solid rgba(249,115,22,0.25);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
 }
