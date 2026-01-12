@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crucible Writer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="drawer-overlay" id="drawer-overlay" aria-hidden="true"></div>
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <p class="eyebrow">The Crucible Writing System</p>
+          <h1>Crucible Writer</h1>
+          <p class="subhead">
+            Walk through every beat of your fantasy novel with structured prompts,
+            strand tracking, and AI-ready guidance.
+          </p>
+        </div>
+        <nav class="nav">
+          <button class="nav-item active" data-step="0">Project Forge</button>
+          <button class="nav-item" data-step="1">Story Strands</button>
+          <button class="nav-item" data-step="2">36-Beat Map</button>
+          <button class="nav-item" data-step="3">Forge Points</button>
+          <button class="nav-item" data-step="4">Planning Docs</button>
+          <button class="nav-item" data-step="5">Characters</button>
+          <button class="nav-item" data-step="6">Mercy Engine</button>
+          <button class="nav-item" data-step="7">Chapters</button>
+          <button class="nav-item" data-step="8">Export & Backup</button>
+        </nav>
+        <div class="tip-card card">
+          <h3>Forge Tips</h3>
+          <ul>
+            <li>Keep all three strands visible in every movement.</li>
+            <li>Plant mercy early to pay it off at the forge points.</li>
+            <li>Use the Dark Mirror to echo your hero’s flaw.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="main-area">
+        <header class="app-header">
+          <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="header-info">
+            <p class="header-label">Current Project</p>
+            <h2 id="project-name">Untitled Project</h2>
+          </div>
+          <div class="status-card card">
+            <div class="status-row">
+              <span>Current phase</span>
+              <select id="project-phase" name="projectPhase">
+                <option value="Planning">Planning</option>
+                <option value="Outlining">Outlining</option>
+                <option value="Drafting">Drafting</option>
+                <option value="Editing">Editing</option>
+              </select>
+            </div>
+            <div class="status-row">
+              <span>Completion</span>
+              <div class="progress">
+                <div class="progress-bar" id="progress-bar"></div>
+              </div>
+              <span id="progress-value">0%</span>
+            </div>
+          </div>
+        </header>
+
+        <main class="content">
+          <div class="step active" data-step="0">
+            <h2>Project Forge</h2>
+            <p>Set the foundation for your Crucible project.</p>
+            <div class="card">
+              <div class="card-header">
+                <h3>Basics</h3>
+              </div>
+              <div class="grid two" id="project-forge-fields"></div>
+              <div id="project-forge-textareas"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>Mercy Engine</h3>
+                <p class="helper-text">Plant compassionate acts you’ll pay off later.</p>
+              </div>
+              <div class="mercy-grid" id="mercy-fields"></div>
+            </div>
+            <div class="ai-section card" data-prompt="You are an AI story coach. Based on the project titled {meta.title} by {meta.author}, genre {meta.genre}, premise {premise}, and theme {theme}, generate 3 high-stakes opening scenes that launch the Crucible journey.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Use this prompt to ask your AI collaborator for spark ideas.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="1">
+            <h2>Story Strands</h2>
+            <p>Define the three narrative strands that drive the Crucible.</p>
+            <div class="strand">
+              <h3>Quest Strand (External)</h3>
+              <textarea name="questStrand" data-required="true" placeholder="Example: Retrieve the shattered crown to end a century-long winter." rows="4"></textarea>
+            </div>
+            <div class="strand">
+              <h3>Fire Strand (Internal)</h3>
+              <textarea name="fireStrand" data-required="true" placeholder="Example: Learns to wield forbidden flame without losing their empathy." rows="4"></textarea>
+            </div>
+            <div class="strand">
+              <h3>Constellation Strand (Relationships)</h3>
+              <textarea name="constellationStrand" data-required="true" placeholder="Example: The heir must unite rival houses while reconciling with a betrayed mentor." rows="4"></textarea>
+            </div>
+            <div class="ai-section" data-prompt="Review the Quest strand: {questStrand}. Fire strand: {fireStrand}. Constellation strand: {constellationStrand}. Suggest one major turning point for each strand that could align at a forge point.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Generate prompts to align your strands.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="2">
+            <h2>36-Beat Map</h2>
+            <p>Outline beats across the six movements. Beat 1 is required to continue.</p>
+            <div class="movement-selector">
+              <button class="pill active" data-movement="Ignition">Ignition (1-6)</button>
+              <button class="pill" data-movement="First Tempering">First Tempering (7-11)</button>
+              <button class="pill" data-movement="Scattering">Scattering (12-18)</button>
+              <button class="pill" data-movement="Brightest Burning">Brightest Burning (19-27)</button>
+              <button class="pill" data-movement="Final Forging">Final Forging (28-33)</button>
+              <button class="pill" data-movement="Tempered Blade">Tempered Blade (34-36)</button>
+            </div>
+            <div class="beats" id="beats-grid"></div>
+            <div class="ai-section" data-prompt="Using beat 1: Quest {beat1Quest}, Fire {beat1Fire}, Constellation {beat1Constellation}, propose a beat 2 escalation that advances each strand.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Ask your AI to extend your beat chain.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="3">
+            <h2>Forge Points</h2>
+            <p>Define your five critical convergence moments.</p>
+            <div class="forge-grid">
+              <div class="forge-card">
+                <h3>Ignition Forge (Beat 6)</h3>
+                <textarea name="forgeIgnition" data-required="true" placeholder="Example: The hero burns the last bridge home to save their sister." rows="3"></textarea>
+              </div>
+              <div class="forge-card">
+                <h3>First Crucible (Beat 11)</h3>
+                <textarea name="forgeFirst" placeholder="Example: Give up the relic to save a village, losing critical leverage." rows="3"></textarea>
+              </div>
+              <div class="forge-card">
+                <h3>Second Crucible (Beat 21)</h3>
+                <textarea name="forgeSecond" placeholder="Example: Choose between saving the mentor or sealing the abyss." rows="3"></textarea>
+              </div>
+              <div class="forge-card">
+                <h3>Third Crucible (Beat 28)</h3>
+                <textarea name="forgeThird" placeholder="Example: Break the sacred oath to protect the constellation bond." rows="3"></textarea>
+              </div>
+              <div class="forge-card">
+                <h3>Apex Willed Surrender (Beat 33)</h3>
+                <textarea name="forgeApex" placeholder="Example: Surrender the crown to end the war and free the realm." rows="3"></textarea>
+              </div>
+            </div>
+            <div class="ai-section" data-prompt="Summarize the five forge points: Ignition {forgeIgnition}, First {forgeFirst}, Second {forgeSecond}, Third {forgeThird}, Apex {forgeApex}. Suggest a unifying thematic throughline for these convergences.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Check that each forge point aligns with your theme.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="4">
+            <h2>Planning Documents</h2>
+            <p>Create your planning documents and mark their status.</p>
+            <div class="grid three">
+              <label class="check">
+                <input type="checkbox" name="docThesis" />
+                Crucible Thesis
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docStrands" />
+                Quest/Fire/Constellation Maps
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docDarkMirror" />
+                Dark Mirror Profile
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docConstellationBible" />
+                Constellation Bible
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docMercyLedger" />
+                Mercy Ledger
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docWorldForge" />
+                World Forge
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docCharacterList" />
+                Character Ledger
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docSceneMap" />
+                Scene Map
+              </label>
+              <label class="check">
+                <input type="checkbox" name="docTimeline" />
+                Timeline
+              </label>
+            </div>
+            <div class="ai-section" data-prompt="List any gaps in planning docs based on these statuses: Thesis {docThesis}, Strand Maps {docStrands}, Dark Mirror {docDarkMirror}, Constellation Bible {docConstellationBible}, Mercy Ledger {docMercyLedger}, World Forge {docWorldForge}, Character Ledger {docCharacterList}, Scene Map {docSceneMap}, Timeline {docTimeline}.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Ask for suggestions to fill planning gaps.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="5">
+            <h2>Characters</h2>
+            <p>Track your protagonist, allies, and dark mirror.</p>
+            <div class="grid two">
+              <label>
+                Protagonist
+                <input name="protagonist" data-required="true" placeholder="Example: Kael, fear of abandonment" />
+              </label>
+              <label>
+                Dark Mirror (Antagonist)
+                <input name="darkMirror" placeholder="Example: Varyn, power without compassion" />
+              </label>
+            </div>
+            <label>
+              Constellation Web (key relationships)
+              <textarea name="constellationWeb" placeholder="Example: Kael owes a debt to the thieves' guild; Eira distrusts the royal guard." rows="4"></textarea>
+            </label>
+            <div class="ai-section" data-prompt="Protagonist: {protagonist}. Dark Mirror: {darkMirror}. Constellation web: {constellationWeb}. Propose two relationship pressures that force the Fire strand transformation.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Generate emotional pressure points.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="6">
+            <h2>Mercy Engine</h2>
+            <p>Plant compassionate acts to pay off later.</p>
+            <div class="card">
+              <p class="helper-text">Manage Mercy Engine fields from the Project Forge screen.</p>
+            </div>
+            <div class="ai-section" data-prompt="Mercy planted: {mercy.early}. Brewing: {mercy.brewing}. Paid off: {mercy.paidOff}. Suggest a beat to link this mercy payoff to a forge point.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Make your mercy payoff land at a forge point.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="7">
+            <h2>Chapter Outline</h2>
+            <p>Create a chapter path linked to beats.</p>
+            <div class="grid two">
+              <label>
+                Chapter Count Target
+                <input name="chapterCount" type="number" data-required="true" placeholder="Example: 45" />
+              </label>
+              <label>
+                Average Word Count
+                <input name="chapterWords" type="number" placeholder="Example: 3500" />
+              </label>
+            </div>
+            <label>
+              Chapter Notes
+              <textarea name="chapterNotes" placeholder="Example: Chapters 1-3 focus on the skyforge, POV shifts at Beat 6." rows="4"></textarea>
+            </label>
+            <div class="ai-section" data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Ask for chapter pacing recommendations.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="step" data-step="8">
+            <h2>Export & Backup</h2>
+            <p>Export your Crucible project as JSON for safekeeping.</p>
+            <div class="export-card card">
+              <button class="primary" id="export-json">Generate JSON</button>
+              <button class="secondary" id="download-json">Download Backup</button>
+              <button class="ghost" id="reset-data">Reset Local Data</button>
+            </div>
+            <textarea id="export-output" rows="10" readonly></textarea>
+            <div class="ai-section card" data-prompt="Summarize this Crucible project for a writing partner: {meta.title} by {meta.author}, premise {premise}, theme {theme}, forge points {forgeIgnition} / {forgeFirst} / {forgeSecond} / {forgeThird} / {forgeApex}.">
+              <div>
+                <h3>AI Guidance</h3>
+                <p>Generate a shareable summary for collaborators.</p>
+              </div>
+              <button class="secondary" data-ai="generate">Generate Prompt</button>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="wizard-controls">
+            <button class="secondary" id="prev-step">Back</button>
+            <button class="primary" id="next-step">Next Step</button>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="modal" id="reset-modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
+        <h3 id="reset-modal-title">Reset Local Data</h3>
+        <p>This will delete local projects on this device.</p>
+        <div class="modal-actions">
+          <button class="secondary" id="cancel-reset">Cancel</button>
+          <button class="danger" id="confirm-reset">Delete Local Data</button>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
