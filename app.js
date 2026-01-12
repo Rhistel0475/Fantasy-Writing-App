@@ -11,25 +11,67 @@ function safeParse(json, fallback) {
 function getDefaultProject() {
   return {
     projectPhase: "Planning",
+
+    // Project Forge
     author: "",
     title: "",
     genre: "",
     targetWordCount: 90000,
+    premise: "",
+    theme: "",
 
+    // Mercy Engine
     mercyPlanted: "",
     mercyBrewing: "",
     mercyPaid: "",
+    mercyNotes: "",
 
+    // Chapters
     chapterCount: "",
     chapterWords: "",
     chapterNotes: "",
   };
 }
 
+/**
+ * Legacy migrations:
+ * - wordCount -> targetWordCount
+ * - mercy.early -> mercyPlanted (if older nested structure exists)
+ * - keep mercyPlanted as the canonical "early mercy" field
+ */
+function migrateProject(p) {
+  const out = { ...p };
+
+  // wordCount -> targetWordCount
+  if (
+    (out.targetWordCount === undefined || out.targetWordCount === null || out.targetWordCount === "") &&
+    (out.wordCount !== undefined && out.wordCount !== null && String(out.wordCount).trim() !== "")
+  ) {
+    out.targetWordCount = out.wordCount;
+  }
+
+  // mercy.early -> mercyPlanted
+  if (
+    (out.mercyPlanted === undefined || out.mercyPlanted === null || String(out.mercyPlanted).trim() === "") &&
+    out.mercy &&
+    typeof out.mercy === "object" &&
+    out.mercy.early
+  ) {
+    out.mercyPlanted = out.mercy.early;
+  }
+
+  return out;
+}
+
 function loadProject() {
   const raw = localStorage.getItem(STORAGE_KEY);
   const p = raw ? safeParse(raw, null) : null;
-  return p && typeof p === "object" ? { ...getDefaultProject(), ...p } : getDefaultProject();
+
+  if (p && typeof p === "object") {
+    const migrated = migrateProject(p);
+    return { ...getDefaultProject(), ...migrated };
+  }
+  return getDefaultProject();
 }
 
 function saveProject(project) {
@@ -66,12 +108,11 @@ function getFieldValue(el) {
 }
 
 function computeCompletion(project) {
-  // Very simple: count required fields filled + some important optional ones
   const requiredKeys = ["author", "title", "genre"];
   const optionalKeys = ["targetWordCount", "mercyPlanted", "mercyBrewing", "mercyPaid"];
 
   let filled = 0;
-  let total = requiredKeys.length + optionalKeys.length;
+  const total = requiredKeys.length + optionalKeys.length;
 
   for (const k of requiredKeys) {
     if ((project[k] ?? "").toString().trim().length > 0) filled++;
@@ -108,6 +149,17 @@ function showStep(stepIndex) {
   if (navEl) navEl.classList.add("active");
 }
 
+/**
+ * Returns an ordered array of step indexes that actually exist in the DOM.
+ * This fixes “blank page” when steps 1–5 aren’t in index.html yet.
+ */
+function getExistingStepOrder() {
+  return qsa(".step")
+    .map((el) => Number(el.getAttribute("data-step")))
+    .filter((n) => Number.isFinite(n))
+    .sort((a, b) => a - b);
+}
+
 function fillTemplate(template, project) {
   return template.replace(/\{(\w+)\}/g, (_, key) => {
     const v = project[key];
@@ -128,8 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Populate all fields
+  // Populate all fields from storage
   getAllFields().forEach((el) => {
+    // Support legacy name="wordCount" if your HTML still uses it
+    if (el.name === "wordCount" && project.targetWordCount !== undefined) {
+      setFieldValue(el, project.targetWordCount);
+      return;
+    }
     setFieldValue(el, project[el.name]);
   });
 
@@ -139,7 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
   getAllFields().forEach((el) => {
     const evt = el.tagName === "SELECT" ? "change" : "input";
     el.addEventListener(evt, () => {
-      project[el.name] = getFieldValue(el);
+      const key = el.name === "wordCount" ? "targetWordCount" : el.name;
+      project[key] = getFieldValue(el);
       saveProject(project);
       updateProgressUI(project);
     });
@@ -154,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Next/Back buttons
+  // Next/Back buttons (only moves through steps that exist)
   const prevBtn = qs("#prev-step");
   const nextBtn = qs("#next-step");
 
@@ -164,23 +222,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return Number(active.getAttribute("data-step") || "0");
   }
 
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
-      const current = getActiveStepIndex();
-      const next = Math.max(0, current - 1);
-      showStep(next);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+  function goRelative(delta) {
+    const order = getExistingStepOrder();
+    if (order.length === 0) return;
+
+    const current = getActiveStepIndex();
+    const pos = Math.max(0, order.indexOf(current));
+    const nextPos = Math.max(0, Math.min(order.length - 1, pos + delta));
+    const nextStep = order[nextPos];
+
+    showStep(nextStep);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      const current = getActiveStepIndex();
-      const next = Math.min(8, current + 1);
-      showStep(next);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }
+  if (prevBtn) prevBtn.addEventListener("click", () => goRelative(-1));
+  if (nextBtn) nextBtn.addEventListener("click", () => goRelative(1));
 
   // AI Guidance (display prompt)
   qsa('[data-ai="generate"]').forEach((btn) => {
@@ -190,19 +246,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Refresh project from fields right before generating
       getAllFields().forEach((el) => {
-        project[el.name] = getFieldValue(el);
+        const key = el.name === "wordCount" ? "targetWordCount" : el.name;
+        project[key] = getFieldValue(el);
       });
+      if (phaseSelect) project.projectPhase = phaseSelect.value;
+
       saveProject(project);
       updateProgressUI(project);
 
       const template = section.getAttribute("data-prompt") || "";
       const prompt = fillTemplate(template, project);
 
-      // Find the output area after this section
       const output = section.parentElement.querySelector("[data-ai-output]");
-      if (output) {
-        output.textContent = prompt;
-      }
+      if (output) output.textContent = prompt;
     });
   });
 
@@ -212,9 +268,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const exportOut = qs("#export-output");
 
   function getProjectSnapshot() {
-    // Ensure latest values
     getAllFields().forEach((el) => {
-      project[el.name] = getFieldValue(el);
+      const key = el.name === "wordCount" ? "targetWordCount" : el.name;
+      project[key] = getFieldValue(el);
     });
     if (phaseSelect) project.projectPhase = phaseSelect.value;
     saveProject(project);
@@ -228,10 +284,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (downloadBtn && exportOut) {
+  if (downloadBtn) {
     downloadBtn.addEventListener("click", () => {
       const snapshot = getProjectSnapshot();
-      const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: "application/json" });
+      const json = JSON.stringify(snapshot, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
@@ -245,6 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Start at step 0
-  showStep(0);
+  // Start at first existing step (usually 0)
+  const order = getExistingStepOrder();
+  showStep(order.length ? order[0] : 0);
 });
