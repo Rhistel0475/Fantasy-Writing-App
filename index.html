@@ -17,6 +17,7 @@
             strand tracking, and AI-ready guidance.
           </p>
         </div>
+
         <div class="status-card">
           <div class="status-row">
             <span>Current phase</span>
@@ -27,6 +28,7 @@
               <option value="Editing">Editing</option>
             </select>
           </div>
+
           <div class="status-row">
             <span>Completion</span>
             <div class="progress">
@@ -51,6 +53,7 @@
             <button class="nav-item" data-step="7">8. Chapters</button>
             <button class="nav-item" data-step="8">9. Export & Backup</button>
           </nav>
+
           <div class="tip-card">
             <h3>Forge Tips</h3>
             <ul>
@@ -62,24 +65,74 @@
         </aside>
 
         <section class="content">
+          <!-- STEP 0: PROJECT FORGE -->
           <div class="step active" data-step="0">
             <h2>Project Forge</h2>
             <p>Set the foundation for your Crucible project.</p>
+
+            <!-- BASICS (RESTORED) -->
             <div class="grid two">
               <label>
-                Project Title
-                <input name="mercyPlanted" data-required="true" placeholder="Who receives mercy early?" />
+                Author
+                <input name="author" data-required="true" placeholder="e.g., S. B. Smith" />
               </label>
+
+              <label>
+                Project Title
+                <input name="title" data-required="true" placeholder="e.g., The Ashes of Elarion" />
+              </label>
+
+              <label>
+                Genre
+                <select name="genre" data-required="true">
+                  <option value="" selected disabled>Select a genre</option>
+                  <option>Epic Fantasy</option>
+                  <option>Urban Fantasy</option>
+                  <option>Dark Fantasy</option>
+                  <option>Cozy Fantasy</option>
+                  <option>Sword &amp; Sorcery</option>
+                  <option>Romantic Fantasy</option>
+                  <option>YA Fantasy</option>
+                  <option>Progression Fantasy</option>
+                  <option>LitRPG</option>
+                  <option>Other</option>
+                </select>
+              </label>
+
+              <label>
+                Target Word Count
+                <input
+                  name="targetWordCount"
+                  type="number"
+                  min="0"
+                  step="1000"
+                  placeholder="90000"
+                />
+              </label>
+            </div>
+
+            <!-- MERCY (KEPT) -->
+            <div class="grid two" style="margin-top: 12px;">
+              <label>
+                Mercy Planted (Early)
+                <input name="mercyPlanted" placeholder="Who receives mercy early?" />
+              </label>
+
               <label>
                 Mercy Brewing
                 <input name="mercyBrewing" placeholder="How does it echo?" />
               </label>
+
               <label>
                 Mercy Paid Off
                 <input name="mercyPaid" placeholder="When does it return?" />
               </label>
             </div>
-            <div class="ai-section" data-prompt="Mercy planted: {mercyPlanted}. Brewing: {mercyBrewing}. Paid off: {mercyPaid}. Suggest a beat to link this mercy payoff to a forge point.">
+
+            <div
+              class="ai-section"
+              data-prompt="Project: {title} ({genre}) by {author}. Mercy planted: {mercyPlanted}. Brewing: {mercyBrewing}. Paid off: {mercyPaid}. Suggest a beat to link this mercy payoff to a forge point."
+            >
               <div>
                 <h3>AI Guidance</h3>
                 <p>Make your mercy payoff land at a forge point.</p>
@@ -89,9 +142,11 @@
             <div class="ai-output" data-ai-output></div>
           </div>
 
+          <!-- STEP 7: CHAPTERS -->
           <div class="step" data-step="7">
             <h2>Chapter Outline</h2>
             <p>Create a chapter path linked to beats.</p>
+
             <div class="grid two">
               <label>
                 Chapter Count Target
@@ -102,11 +157,20 @@
                 <input name="chapterWords" type="number" placeholder="3500" />
               </label>
             </div>
+
             <label>
               Chapter Notes
-              <textarea name="chapterNotes" placeholder="Outline chapter goals, POV shifts, or research." rows="4"></textarea>
+              <textarea
+                name="chapterNotes"
+                placeholder="Outline chapter goals, POV shifts, or research."
+                rows="4"
+              ></textarea>
             </label>
-            <div class="ai-section" data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing.">
+
+            <div
+              class="ai-section"
+              data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing."
+            >
               <div>
                 <h3>AI Guidance</h3>
                 <p>Ask for chapter pacing recommendations.</p>
@@ -116,15 +180,22 @@
             <div class="ai-output" data-ai-output></div>
           </div>
 
+          <!-- STEP 8: EXPORT -->
           <div class="step" data-step="8">
             <h2>Export & Backup</h2>
             <p>Export your Crucible project as JSON for safekeeping.</p>
+
             <div class="export-card">
               <button class="primary" id="export-json">Generate JSON</button>
               <button class="secondary" id="download-json">Download Backup</button>
             </div>
+
             <textarea id="export-output" rows="10" readonly></textarea>
-            <div class="ai-section" data-prompt="Summarize this Crucible project for a writing partner: {title} by {author}, premise {premise}, theme {theme}, forge points {forgeIgnition} / {forgeFirst} / {forgeSecond} / {forgeThird} / {forgeApex}.">
+
+            <div
+              class="ai-section"
+              data-prompt="Summarize this Crucible project for a writing partner: {title} by {author}, genre {genre}, target words {targetWordCount}, mercy {mercyPlanted}/{mercyBrewing}/{mercyPaid}."
+            >
               <div>
                 <h3>AI Guidance</h3>
                 <p>Generate a shareable summary for collaborators.</p>
@@ -141,6 +212,7 @@
         </section>
       </main>
     </div>
+
     <script src="app.js"></script>
   </body>
 </html>
