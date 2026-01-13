@@ -463,6 +463,124 @@
                 <div class="ai-output" data-ai-output></div>
               </div>
             </div>
+
+                  <label class="field">
+                    <span class="field-label">Author</span>
+                    <input
+                      name="author"
+                      placeholder="Your name"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Genre</span>
+                    <select name="genre">
+                      <option value="">Select a genre...</option>
+                      <option>Epic Fantasy</option>
+                      <option>Dark Fantasy</option>
+                      <option>Grimdark</option>
+                      <option>Urban Fantasy</option>
+                      <option>Romantasy</option>
+                      <option>Sword & Sorcery</option>
+                      <option>Mythic Fantasy</option>
+                      <option>Cozy Fantasy</option>
+                      <option>Progression Fantasy</option>
+                      <option>LitRPG</option>
+                      <option>Other</option>
+                    </select>
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Target Word Count</span>
+                    <input
+                      name="wordCount"
+                      type="number"
+                      inputmode="numeric"
+                      placeholder="90000"
+                    />
+                    <span class="field-helper">Epic fantasy often lands between 120,000-180,000.</span>
+                  </label>
+                </div>
+
+                <div class="grid two">
+                  <label class="field">
+                    <span class="field-label">Logline / Premise</span>
+                    <textarea
+                      name="premise"
+                      placeholder="In one sentence, what is your story about?"
+                      rows="3"
+                    ></textarea>
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Theme</span>
+                    <textarea
+                      name="theme"
+                      placeholder="What truth will the story explore?"
+                      rows="3"
+                    ></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Mercy Engine</h3>
+                    <p class="muted">Plant early compassion to pay it off at the forge points.</p>
+                  </div>
+                </div>
+                <div class="grid two">
+                  <label class="field">
+                    <span class="field-label">Mercy Planted (Early)</span>
+                    <input
+                      name="mercyPlanted"
+                      data-required="true"
+                      placeholder="Who receives mercy early?"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Mercy Brewing</span>
+                    <input
+                      name="mercyBrewing"
+                      placeholder="How does it echo?"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Mercy Paid Off</span>
+                    <input
+                      name="mercyPaid"
+                      placeholder="When does it return?"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Mercy Notes</span>
+                    <input
+                      name="mercyNotes"
+                      placeholder="Optional: why does this matter?"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div class="card ai-card">
+                <div class="ai-section"
+                  data-prompt="Project: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Target words: {wordCount}. Suggest 3 strong story directions and 3 core conflicts that fit the Crucible system."
+                >
+                  <div class="ai-header">
+                    <div>
+                      <h3>AI Guidance</h3>
+                      <p>Get strong options for conflict + direction.</p>
+                    </div>
+                    <button class="secondary" data-ai="generate">Generate Prompt</button>
+                  </div>
+                </div>
+                <div class="ai-output" data-ai-output></div>
+              </div>
+            </div>
           </div>
 
           <!-- STEP 1 -->
@@ -1639,6 +1757,25 @@
             <h2>Planning Docs</h2>
             <p>Capture the documents that anchor your Crucible system.</p>
 
+            <div class="ai-section"
+              data-prompt="Forge points: Ignition {forgeIgnitionStakes}; First {forgeFirstCrucibleStakes}; Second {forgeSecondCrucibleStakes}; Third {forgeThirdCrucibleStakes}; Apex {forgeApexStakes}. Suggest how each forge point transforms all three strands."
+            >
+              <div class="ai-header">
+                <div>
+                  <h3>AI Guidance</h3>
+                  <p>Stress-test your forge point escalations.</p>
+                </div>
+                <button class="secondary" data-ai="generate">Generate Prompt</button>
+              </div>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="step" data-step="4">
+            <h2>Planning Docs</h2>
+            <p>Capture the documents that anchor your Crucible system.</p>
+
             <div class="grid two">
               <div class="doc-card">
                 <h3>Crucible Thesis</h3>
@@ -1858,6 +1995,13 @@
                   <p>Check your core documents for alignment.</p>
                 </div>
                 <button class="secondary" data-ai="generate">Generate Prompt</button>
+            >
+              <div class="ai-header">
+                <div>
+                  <h3>AI Guidance</h3>
+                  <p>Check your core documents for alignment.</p>
+                </div>
+                <button class="secondary" data-ai="generate">Generate Prompt</button>
               data-prompt="Ignition: {ignitionSummary}. First Tempering: {firstTemperingSummary}. Scattering: {scatteringSummary}. Brightest Burning: {brightestBurningSummary}. Final Forging: {finalForgingSummary}. Tempered Blade: {temperedBladeSummary}. Suggest missing beats and pacing risks."
             >
               <div>
@@ -1890,6 +2034,26 @@
                     name="protagonistArc"
                     rows="3"
                     placeholder="How the hero transforms across the Crucible."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="character-card">
+                <h3>Dark Mirror</h3>
+                <label>
+                  Antagonist Name
+                  <input
+                    name="antagonistName"
+                    data-required="true"
+                    placeholder="Shadow counterpart"
+                  />
+                </label>
+                <label>
+                  Mirror Traits
+                  <textarea
+                    name="antagonistTraits"
+                    rows="3"
+                    placeholder="How does the antagonist reflect the hero's flaw?"
           <!-- STEP 3 -->
           <div class="step" data-step="3">
             <h2>Forge Points</h2>
@@ -1918,6 +2082,22 @@
               </div>
 
               <div class="character-card">
+                <h3>Constellation Cast</h3>
+                <label>
+                  Core Allies &amp; Rivals
+                  <textarea
+                    name="constellationCast"
+                    data-required="true"
+                    rows="3"
+                    placeholder="List the key characters and roles."
+                  ></textarea>
+                </label>
+                <label>
+                  Relationship Shifts
+                  <textarea
+                    name="relationshipShifts"
+                    rows="3"
+                    placeholder="How do bonds evolve across the journey?"
                 <h3>Dark Mirror</h3>
                 <label>
                   Antagonist Name
