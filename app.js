@@ -378,8 +378,31 @@ document.addEventListener("DOMContentLoaded", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  if (prevBtn) prevBtn.addEventListener("click", () => goRelative(-1));
-  if (nextBtn) nextBtn.addEventListener("click", () => goRelative(1));
+  function handleStepNav(btn, delta) {
+    if (!btn) return;
+    btn.addEventListener("click", (event) => {
+      const href = btn.getAttribute("data-href");
+      if (href) {
+        if (delta > 0 && !validateStep(getActiveStepIndex())) {
+          event.preventDefault();
+          return;
+        }
+        window.location.href = href;
+        return;
+      }
+      goRelative(delta);
+    });
+  }
+
+  handleStepNav(prevBtn, -1);
+  handleStepNav(nextBtn, 1);
+
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn) {
+    beginBtn.addEventListener("click", () => {
+      showStep(0);
+    });
+  }
 
   const beginBtn = qs("#begin-journey");
   if (beginBtn) {
