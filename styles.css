@@ -1,4 +1,79 @@
 /* =========================
+   Crucible Writer — styles.css (CLEAN)
+   Sticky header, responsive layout
+   Works with: .app, .app-header, .layout, .sidebar, .content, .step, .grid, .ai-section
+   ========================= */
+
+:root{
+  --bg0:#070a0f;
+  --bg1:#0b0f16;
+
+  --panel: rgba(255,255,255,0.06);
+  --panel2: rgba(255,255,255,0.04);
+  --stroke: rgba(255,255,255,0.10);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.70);
+  --muted2: rgba(255,255,255,0.55);
+
+  --accent1:#ffb14a;
+  --accent2:#ff7a18;
+
+  --radius: 18px;
+  --shadow: 0 18px 50px rgba(0,0,0,0.35);
+}
+
+/* --- Reset / Base --- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.35;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 800px at 20% 20%, rgba(255,255,255,0.08), transparent 60%),
+    radial-gradient(1000px 700px at 80% 30%, rgba(255,140,40,0.10), transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+}
+
+a{ color: inherit; }
+
+input, select, textarea, button{ font: inherit; }
+
+/* --- App container --- */
+.app{
+  width: 100%;
+  padding: 18px 18px 44px;
+}
+
+/* --- Sticky Header --- */
+.app-header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  max-width: 1200px;
+  margin: 0 auto 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+
+  padding: 18px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(11,15,22,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+}
+
+.eyebrow{
    Crucible Writer — Clean, responsive styles.css
    Mobile-safe, no duplicates
    ========================= */
@@ -117,20 +192,33 @@ a {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-size: 12px;
+  color: rgba(255,170,70,0.85);
   color: rgba(255, 170, 70, 0.85);
 }
 
-h1 {
+h1{
   margin: 0 0 10px;
+  font-size: 34px;
   font-size: 44px;
   line-height: 1.06;
   font-size: 32px;
   line-height: 1.05;
 }
 
-.subhead {
+.subhead{
   margin: 0;
   max-width: 62ch;
+  color: var(--muted2);
+}
+
+/* Status Card in header */
+.status-card{
+  width: 320px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
   color: rgba(255, 255, 255, 0.68);
 }
 
@@ -165,11 +253,30 @@ h1 {
   padding: 14px;
 }
 
-.status-row {
+.status-row{
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
   margin-bottom: 12px;
+}
+
+.status-row:last-child{ margin-bottom: 0; }
+
+.status-row > span{
+  color: var(--muted2);
+  font-size: 13px;
+}
+
+/* Progress */
+.progress{
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
+}
+
+.progress-bar{
 }
 
 .status-row:last-child {
@@ -187,11 +294,44 @@ h1 {
   font-size: 28px;
 .progress-bar {
   height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
   transition: width 0.2s ease;
 }
 
+/* --- Main Layout --- */
+.layout{
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.content{
+  min-width: 0;
+  max-width: 860px;
+}
+
+/* Sidebar */
+.sidebar{
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+
+  position: sticky;
+  top: 110px; /* sits below sticky header */
+  align-self: start;
+
+  max-height: calc(100dvh - 140px);
+  overflow: auto;
+}
+
+.sidebar h2{
 /* SIDEBAR */
 .sidebar {
   width: 260px;
@@ -219,20 +359,47 @@ h1 {
 
 .sidebar-header h2 {
   margin: 0 0 12px;
-  font-size: 22px;
+  font-size: 28px;
 }
 
+.sidebar nav{
 .sidebar nav {
   display: grid;
   gap: 10px;
   margin-bottom: 14px;
 }
 
-.nav-item {
+/* Nav buttons */
+.nav-item{
   width: 100%;
   text-align: left;
   padding: 12px 14px;
   border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.80);
+  cursor: pointer;
+}
+
+.nav-item:hover{
+  background: rgba(255,255,255,0.06);
+}
+
+.nav-item.active{
+  border-color: rgba(255,150,60,0.55);
+  box-shadow: 0 0 0 3px rgba(255,150,60,0.10);
+  background: linear-gradient(180deg, rgba(255,140,40,0.12), rgba(255,255,255,0.03));
+}
+
+/* Tip card */
+.tip-card{
+  padding: 14px 14px 10px;
+  border-radius: var(--radius);
+  background: var(--panel2);
+  border: 1px solid var(--stroke);
+}
+
+.tip-card h3{ margin: 0 0 8px; }
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(255, 255, 255, 0.04);
   color: rgba(255, 255, 255, 0.80);
@@ -317,9 +484,23 @@ h1 {
   margin: 0 0 8px;
 }
 
-.tip-card ul {
+.tip-card ul{
   margin: 0;
   padding-left: 18px;
+  color: var(--muted);
+}
+
+.tip-card li{ margin: 6px 0; }
+
+/* --- Steps / Cards --- */
+.step{
+  display: none;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
   color: rgba(255, 255, 255, 0.70);
 }
 
@@ -369,10 +550,34 @@ h1 {
   display: none;
 }
 
-.step.active {
-  display: block;
+.step.active{ display: block; }
+
+.step h2{
+  margin: 0 0 8px;
+  font-size: 28px;
 }
 
+.step p{
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+/* --- Forms --- */
+label{
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.78);
+}
+
+input, select, textarea{
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(10,14,22,0.55);
+  color: var(--text);
+  outline: none;
 .step h2 {
   margin: 0 0 8px;
   font-size: 28px;
@@ -459,18 +664,34 @@ textarea {
   box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
 }
 
-textarea {
+textarea{
   resize: vertical;
   min-height: 92px;
 }
 
 input::placeholder,
+textarea::placeholder{
+  color: rgba(255,255,255,0.40);
 textarea::placeholder {
   color: rgba(255, 255, 255, 0.40);
 }
 
 input:focus,
 select:focus,
+textarea:focus{
+  border-color: rgba(255,150,60,0.55);
+  box-shadow: 0 0 0 3px rgba(255,150,60,0.14);
+}
+
+/* --- Grids --- */
+.grid{
+  display: grid;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.grid.two{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 textarea:focus {
   border-color: rgba(255, 150, 60, 0.55);
   box-shadow: 0 0 0 3px rgba(255, 150, 60, 0.14);
@@ -502,11 +723,9 @@ textarea:focus {
   padding: 16px;
 }
 
-.beats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
+/* --- AI Section --- */
+.ai-section{
+  margin-top: 14px;
 
 /* AI */
 .ai-card {
@@ -526,6 +745,20 @@ textarea:focus {
 .ai-header {
   display: flex;
   gap: 14px;
+
+  border-radius: var(--radius);
+  border: 1px solid rgba(249,115,22,0.25);
+  background: linear-gradient(180deg, rgba(249,115,22,0.12), rgba(249,115,22,0.06));
+  box-shadow: 0 10px 22px rgba(0,0,0,0.26);
+
+  padding: 16px;
+}
+
+.ai-section h3{ margin: 0 0 6px; }
+
+.ai-section p{
+  margin: 0;
+  color: rgba(255,255,255,0.72);
   align-items: center;
   justify-content: space-between;
 }
@@ -548,10 +781,19 @@ textarea:focus {
   }
 }
 
-.ai-output {
+.ai-output{
   margin-top: 12px;
   padding: 14px;
   border-radius: 14px;
+  border: 1px dashed rgba(255,150,60,0.35);
+  background: rgba(255,255,255,0.03);
+  min-height: 44px;
+  white-space: pre-wrap;
+  color: rgba(255,255,255,0.80);
+}
+
+/* --- Buttons --- */
+button{
   border: 1px dashed rgba(255, 150, 60, 0.35);
   background: rgba(255, 255, 255, 0.03);
   min-height: 44px;
@@ -566,6 +808,64 @@ button {
 }
 
 .primary,
+.secondary{
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.primary{
+  background: linear-gradient(180deg, var(--accent1), var(--accent2));
+  color: #121212;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(255,140,40,0.18);
+}
+
+.primary:hover{ filter: brightness(1.03); }
+
+.secondary{
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.88);
+}
+
+.secondary:hover{ background: rgba(255,255,255,0.07); }
+
+/* --- Wizard controls --- */
+.wizard-controls{
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px 0 0;
+}
+
+.wizard-controls .secondary,
+.wizard-controls .primary{
+  min-width: 140px;
+}
+
+/* --- Export --- */
+.export-card{
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--panel2);
+  border: 1px solid var(--stroke);
+  margin-bottom: 12px;
+}
+
+#export-output{
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(10,14,22,0.55);
+  color: rgba(255,255,255,0.85);
+}
+
+/* --- Responsive --- */
+@media (max-width: 980px){
+  .app-header{
 .secondary {
   padding: 12px 16px;
   border-radius: 14px;
@@ -608,6 +908,25 @@ button {
 @media (max-width: 520px) {
   .wizard-controls {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-card{
+    width: 100%;
+  }
+
+  .layout{
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar{
+    position: relative;
+    top: 0;
+    max-height: none;
+  }
+
+  .content{
+    max-width: 100%;
   }
   .wizard-controls .secondary,
   .wizard-controls .primary {
@@ -615,6 +934,24 @@ button {
   }
 }
 
+@media (max-width: 860px){
+  .grid.two{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px){
+  .ai-section{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ai-section .secondary{
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px){
+  .wizard-controls{
+    flex-direction: column;
 /* --- Progress --- */
 .progress {
   height: 10px;
@@ -659,5 +996,11 @@ button {
 
   .content {
     max-width: 100%;
+  }
+
+  .wizard-controls .secondary,
+  .wizard-controls .primary{
+    width: 100%;
+    min-width: 0;
   }
 }
