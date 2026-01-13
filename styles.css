@@ -104,7 +104,9 @@ h1 {
 .tip-card,
 .strand,
 .beat-card,
-.forge-card {
+.forge-card,
+.doc-card,
+.character-card {
   background: linear-gradient(180deg, var(--panel), var(--panel-2));
   border: 1px solid var(--stroke);
   border-radius: 18px;
@@ -238,6 +240,21 @@ nav {
   display: block;
 }
 
+.step-alert {
+  display: none;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.08);
+  color: rgba(248, 113, 113, 0.9);
+  font-size: 13px;
+}
+
+.step-alert.visible {
+  display: block;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -262,6 +279,11 @@ select {
   padding: 12px;
   color: var(--text);
   font-size: 14px;
+}
+
+.is-invalid {
+  border-color: rgba(248, 113, 113, 0.8);
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
 }
 
 textarea {
@@ -301,6 +323,11 @@ button:focus {
 .strand,
 .beat-card,
 .forge-card {
+  padding: 16px;
+}
+
+.doc-card,
+.character-card {
   padding: 16px;
 }
 
