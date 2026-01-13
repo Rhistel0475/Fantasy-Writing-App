@@ -381,6 +381,19 @@ document.addEventListener("DOMContentLoaded", () => {
   if (prevBtn) prevBtn.addEventListener("click", () => goRelative(-1));
   if (nextBtn) nextBtn.addEventListener("click", () => goRelative(1));
 
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn) {
+    beginBtn.addEventListener("click", () => {
+      showStep(0);
+      const layout = qs(".layout");
+      if (layout) {
+        layout.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }
+
   // AI Guidance (display prompt)
   qsa('[data-ai="generate"]').forEach((btn) => {
     btn.addEventListener("click", () => {
