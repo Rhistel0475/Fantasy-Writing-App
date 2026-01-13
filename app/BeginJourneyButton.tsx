@@ -11,6 +11,7 @@ export function BeginJourneyButton() {
   return (
     <button
       className="w-full rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-4 text-lg font-semibold uppercase tracking-wide text-black shadow-[0_18px_35px_rgba(255,130,40,0.35)] transition hover:brightness-110"
+      className="w-full rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-4 text-lg font-semibold text-black shadow-lg shadow-orange-500/20 transition hover:brightness-110"
       onClick={() => {
         createProject();
         router.push("/project-forge");

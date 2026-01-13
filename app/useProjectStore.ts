@@ -48,4 +48,7 @@ export const useProjectStore = create<State>((set) => ({
       return null;
     }
   },
+    localStorage.setItem("crucible.project", JSON.stringify(p));
+    return p;
+  },
 }));
