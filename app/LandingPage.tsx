@@ -1,3 +1,4 @@
+import { BeginJourneyButton } from "./BeginJourneyButton";
 import GlassCard from "./GlassCard";
 
 export default function LandingPage() {
@@ -38,6 +39,7 @@ export default function LandingPage() {
         </GlassCard>
 
         {/* CTA */}
+        <BeginJourneyButton />
         <button className="w-full rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-4 text-lg font-semibold text-black shadow-lg shadow-orange-500/20 transition hover:brightness-110">
           Begin Your Journey →
         </button>
