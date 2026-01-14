@@ -404,6 +404,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn) {
+    beginBtn.addEventListener("click", () => {
+      const appRoot = qs("#app-root");
+      if (appRoot) appRoot.classList.add("show-wizard");
+      showStep(0);
+      const layout = qs(".layout");
+      if (layout) {
+        layout.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }
+
   // AI Guidance (display prompt)
   qsa('[data-ai="generate"]').forEach((btn) => {
     btn.addEventListener("click", () => {
