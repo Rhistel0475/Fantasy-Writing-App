@@ -337,6 +337,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Sidebar nav buttons
   qsa(".nav-item").forEach((btn) => {
+    if (btn.tagName === "A" && btn.getAttribute("href")) {
+      return;
+    }
+
     btn.addEventListener("click", () => {
       const idx = Number(btn.getAttribute("data-step") || "0");
       const order = getExistingStepOrder();
