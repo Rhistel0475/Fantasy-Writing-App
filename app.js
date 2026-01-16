@@ -502,6 +502,14 @@ document.addEventListener("DOMContentLoaded", () => {
   handleStepNav(nextBtn, 1);
 
   const beginBtn = qs("#begin-journey");
+  if (beginBtn) {
+    beginBtn.addEventListener("click", (event) => {
+      const href = beginBtn.getAttribute("href");
+      if (href) {
+        event.preventDefault();
+        window.location.href = href;
+        return;
+      }
   if (beginBtn && !beginBtn.getAttribute("href")) {
     beginBtn.addEventListener("click", () => {
       showStep(0);
