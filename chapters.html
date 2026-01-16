@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crucible Writer - Chapters</title>
+    <link rel="stylesheet" href="styles.css?v=2" />
+  </head>
+
+  <body>
+    <div class="app show-wizard" id="app-root">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">The Crucible Writing System</p>
+          <h1>Crucible Writer</h1>
+          <p class="subhead">
+            Walk through every beat of your fantasy novel with structured prompts,
+            strand tracking, and AI-ready guidance.
+          </p>
+        </div>
+
+        <div class="status-card">
+          <div class="status-row">
+            <span>Current phase</span>
+            <select id="project-phase" name="projectPhase">
+              <option value="Planning">Planning</option>
+              <option value="Outlining">Outlining</option>
+              <option value="Drafting">Drafting</option>
+              <option value="Editing">Editing</option>
+            </select>
+          </div>
+
+          <div class="status-row">
+            <span>Completion</span>
+            <div class="progress">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span id="progress-value">0%</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="sidebar">
+          <h2>Crucible Path</h2>
+          <nav>
+            <a class="nav-item" data-step="0" href="project-forge.html">1. Project Forge</a>
+            <a class="nav-item" data-step="1" href="story-strands.html">2. Story Strands</a>
+            <a class="nav-item" data-step="2" href="beat-map.html">3. 36-Beat Map</a>
+            <a class="nav-item" data-step="3" href="forge-points.html">4. Forge Points</a>
+            <a class="nav-item" data-step="4" href="planning-docs.html">5. Planning Docs</a>
+            <a class="nav-item" data-step="5" href="characters.html">6. Characters</a>
+            <a class="nav-item" data-step="6" href="mercy-engine.html">7. Mercy Engine</a>
+            <a class="nav-item active" data-step="7" href="chapters.html">8. Chapters</a>
+            <a class="nav-item" data-step="8" href="export-backup.html">9. Export & Backup</a>
+          </nav>
+
+          <div class="tip-card">
+            <h3>Forge Tips</h3>
+            <ul>
+              <li>Keep all three strands visible in every movement.</li>
+              <li>Plant mercy early to pay it off at the forge points.</li>
+              <li>Use the Dark Mirror to echo your hero’s flaw.</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="content">
+          <div class="step-alert" id="step-alert" role="alert"></div>
+
+          <div class="step active" data-step="7">
+            <h2>Chapter Outline</h2>
+            <p>Create a chapter path linked to beats.</p>
+
+            <div class="grid two">
+              <label>
+                Chapter Count Target
+                <input
+                  name="chapterCount"
+                  type="number"
+                  data-required="true"
+                  placeholder="45"
+                />
+              </label>
+
+              <label>
+                Average Word Count
+                <input
+                  name="chapterWords"
+                  type="number"
+                  placeholder="3500"
+                />
+              </label>
+            </div>
+
+            <label>
+              Chapter Notes
+              <textarea
+                name="chapterNotes"
+                placeholder="Outline chapter goals, POV shifts, or research."
+                rows="4"
+              ></textarea>
+            </label>
+
+            <div class="ai-section"
+              data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing."
+            >
+              <div class="ai-header">
+                <div>
+                  <h3>AI Guidance</h3>
+                  <p>Ask for chapter pacing recommendations.</p>
+                </div>
+                <button class="secondary" data-ai="generate">Generate Prompt</button>
+              </div>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="wizard-controls">
+            <a class="secondary" id="prev-step" data-href="mercy-engine.html" href="mercy-engine.html">Back</a>
+            <a class="primary" id="next-step" data-href="export-backup.html" href="export-backup.html">Next Step</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
