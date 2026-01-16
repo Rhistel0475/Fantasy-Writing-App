@@ -20,6 +20,61 @@ function getDefaultProject() {
     premise: "",
     theme: "",
 
+    // Story Strands
+    questSummary: "",
+    questGoal: "",
+    questKeyBeats: "",
+    fireSummary: "",
+    fireWound: "",
+    fireKeyBeats: "",
+    constellationSummary: "",
+    constellationAllies: "",
+    constellationKeyBeats: "",
+
+    // 36-Beat Map
+    ignitionSummary: "",
+    ignitionBeats: "",
+    firstTemperingSummary: "",
+    firstTemperingBeats: "",
+    scatteringSummary: "",
+    scatteringBeats: "",
+    brightestBurningSummary: "",
+    brightestBurningBeats: "",
+    finalForgingSummary: "",
+    finalForgingBeats: "",
+    temperedBladeSummary: "",
+    temperedBladeBeats: "",
+
+    // Forge Points
+    forgeIgnitionStakes: "",
+    forgeIgnitionConvergence: "",
+    forgeFirstCrucibleStakes: "",
+    forgeFirstCrucibleConvergence: "",
+    forgeSecondCrucibleStakes: "",
+    forgeSecondCrucibleConvergence: "",
+    forgeThirdCrucibleStakes: "",
+    forgeThirdCrucibleConvergence: "",
+    forgeApexStakes: "",
+    forgeApexConvergence: "",
+
+    // Planning Docs
+    crucibleThesis: "",
+    darkMirrorProfile: "",
+    constellationBible: "",
+    worldForge: "",
+    mercyLedger: "",
+    strandMapNotes: "",
+
+    // Characters
+    protagonistName: "",
+    protagonistArc: "",
+    antagonistName: "",
+    antagonistTraits: "",
+    constellationCast: "",
+    relationshipShifts: "",
+    characterRoster: "",
+    characterNotes: "",
+
     // Mercy Engine
     mercyPlanted: "",
     mercyBrewing: "",
@@ -108,8 +163,45 @@ function getFieldValue(el) {
 }
 
 function computeCompletion(project) {
-  const requiredKeys = ["author", "title", "genre"];
-  const optionalKeys = ["targetWordCount", "mercyPlanted", "mercyBrewing", "mercyPaid"];
+  const requiredKeys = [
+    "author",
+    "title",
+    "genre",
+    "questSummary",
+    "fireSummary",
+    "constellationSummary",
+    "ignitionSummary",
+    "firstTemperingSummary",
+    "scatteringSummary",
+    "brightestBurningSummary",
+    "finalForgingSummary",
+    "temperedBladeSummary",
+    "forgeIgnitionStakes",
+    "forgeFirstCrucibleStakes",
+    "forgeSecondCrucibleStakes",
+    "forgeThirdCrucibleStakes",
+    "forgeApexStakes",
+    "crucibleThesis",
+    "constellationBible",
+    "protagonistName",
+    "antagonistName",
+    "constellationCast",
+  ];
+  const optionalKeys = [
+    "targetWordCount",
+    "premise",
+    "theme",
+    "questGoal",
+    "questKeyBeats",
+    "fireWound",
+    "fireKeyBeats",
+    "constellationAllies",
+    "constellationKeyBeats",
+    "mercyPlanted",
+    "mercyBrewing",
+    "mercyPaid",
+    "chapterCount",
+  ];
 
   let filled = 0;
   const total = requiredKeys.length + optionalKeys.length;
@@ -147,6 +239,12 @@ function showStep(stepIndex) {
 
   if (stepEl) stepEl.classList.add("active");
   if (navEl) navEl.classList.add("active");
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    alert.textContent = "";
+    alert.classList.remove("visible");
+  }
 }
 
 /**
@@ -165,6 +263,39 @@ function fillTemplate(template, project) {
     const v = project[key];
     return v === undefined || v === null ? "" : String(v);
   });
+}
+
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -200,13 +331,27 @@ document.addEventListener("DOMContentLoaded", () => {
       project[key] = getFieldValue(el);
       saveProject(project);
       updateProgressUI(project);
+      el.classList.remove("is-invalid");
     });
   });
 
   // Sidebar nav buttons
   qsa(".nav-item").forEach((btn) => {
+    if (btn.tagName === "A" && btn.getAttribute("href")) {
+      return;
+    }
+
     btn.addEventListener("click", () => {
       const idx = Number(btn.getAttribute("data-step") || "0");
+      const order = getExistingStepOrder();
+      const current = getActiveStepIndex();
+      const currentPos = order.indexOf(current);
+      const nextStep = order[currentPos + 1];
+
+      if (idx > current) {
+        if (idx !== nextStep || !validateStep(current)) return;
+      }
+
       showStep(idx);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
@@ -231,17 +376,42 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextPos = Math.max(0, Math.min(order.length - 1, pos + delta));
     const nextStep = order[nextPos];
 
+    if (delta > 0 && !validateStep(current)) return;
+
     showStep(nextStep);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  if (prevBtn) prevBtn.addEventListener("click", () => goRelative(-1));
-  if (nextBtn) nextBtn.addEventListener("click", () => goRelative(1));
+  function handleStepNav(btn, delta) {
+    if (!btn) return;
+    btn.addEventListener("click", (event) => {
+      const href = btn.getAttribute("data-href");
+      if (href) {
+        if (delta > 0 && !validateStep(getActiveStepIndex())) {
+          event.preventDefault();
+          return;
+        }
+        window.location.href = href;
+        return;
+      }
+      goRelative(delta);
+    });
+  }
+
+  handleStepNav(prevBtn, -1);
+  handleStepNav(nextBtn, 1);
+
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn && !beginBtn.getAttribute("href")) {
+    beginBtn.addEventListener("click", () => {
+      showStep(0);
+    });
+  }
 
   // AI Guidance (display prompt)
   qsa('[data-ai="generate"]').forEach((btn) => {
     btn.addEventListener("click", () => {
-      const section = btn.closest(".ai-section");
+      const section = btn.closest(".ai-section, .ai-block");
       if (!section) return;
 
       // Refresh project from fields right before generating
@@ -257,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const template = section.getAttribute("data-prompt") || "";
       const prompt = fillTemplate(template, project);
 
-      const output = section.parentElement.querySelector("[data-ai-output]");
+      const output = section.querySelector("[data-ai-output]");
       if (output) output.textContent = prompt;
     });
   });

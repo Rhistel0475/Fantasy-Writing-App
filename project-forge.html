@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crucible Writer - Project Forge</title>
+    <link rel="stylesheet" href="styles.css?v=2" />
+  </head>
+
+  <body>
+    <div class="app show-wizard" id="app-root">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">The Crucible Writing System</p>
+          <h1>Crucible Writer</h1>
+          <p class="subhead">
+            Walk through every beat of your fantasy novel with structured prompts,
+            strand tracking, and AI-ready guidance.
+          </p>
+        </div>
+
+        <div class="status-card">
+          <div class="status-row">
+            <span>Current phase</span>
+            <select id="project-phase" name="projectPhase">
+              <option value="Planning">Planning</option>
+              <option value="Outlining">Outlining</option>
+              <option value="Drafting">Drafting</option>
+              <option value="Editing">Editing</option>
+            </select>
+          </div>
+
+          <div class="status-row">
+            <span>Completion</span>
+            <div class="progress">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span id="progress-value">0%</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="sidebar">
+          <h2>Crucible Path</h2>
+          <nav>
+            <a class="nav-item active" data-step="0" href="project-forge.html">1. Project Forge</a>
+            <a class="nav-item" data-step="1" href="story-strands.html">2. Story Strands</a>
+            <a class="nav-item" data-step="2" href="beat-map.html">3. 36-Beat Map</a>
+            <a class="nav-item" data-step="3" href="forge-points.html">4. Forge Points</a>
+            <a class="nav-item" data-step="4" href="planning-docs.html">5. Planning Docs</a>
+            <a class="nav-item" data-step="5" href="characters.html">6. Characters</a>
+            <a class="nav-item" data-step="6" href="mercy-engine.html">7. Mercy Engine</a>
+            <a class="nav-item" data-step="7" href="chapters.html">8. Chapters</a>
+            <a class="nav-item" data-step="8" href="export-backup.html">9. Export & Backup</a>
+          </nav>
+
+          <div class="tip-card">
+            <h3>Forge Tips</h3>
+            <ul>
+              <li>Keep all three strands visible in every movement.</li>
+              <li>Plant mercy early to pay it off at the forge points.</li>
+              <li>Use the Dark Mirror to echo your hero’s flaw.</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="content">
+          <div class="step active" data-step="0">
+            <h2>Project Forge</h2>
+            <p>Set the foundation for your Crucible project.</p>
+
+            <div class="page">
+              <div class="section">
+                <h2 class="section-title">Basics</h2>
+                <p class="section-subtitle">Capture the essentials before you start forging beats.</p>
+
+                <div class="form-grid two">
+                  <div class="field">
+                    <div class="field-label">Project Title</div>
+                    <input name="title" data-required="true" placeholder="The Ember Crown" />
+                    <div class="field-help">Use the working title you want to see on every page.</div>
+                  </div>
+
+                  <div class="field">
+                    <div class="field-label">Author</div>
+                    <input name="author" placeholder="Your name" />
+                  </div>
+
+                  <div class="field">
+                    <div class="field-label">Genre</div>
+                    <select name="genre">
+                      <option value="">Select a genre...</option>
+                      <option>Epic Fantasy</option>
+                      <option>Dark Fantasy</option>
+                      <option>Grimdark</option>
+                      <option>Urban Fantasy</option>
+                      <option>Romantasy</option>
+                      <option>Sword & Sorcery</option>
+                      <option>Mythic Fantasy</option>
+                      <option>Cozy Fantasy</option>
+                      <option>Progression Fantasy</option>
+                      <option>LitRPG</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <div class="field-label">Target Word Count</div>
+                    <input name="wordCount" type="number" inputmode="numeric" placeholder="90000" />
+                    <div class="field-help">Epic fantasy often lands between 120,000–180,000.</div>
+                  </div>
+                </div>
+
+                <div class="form-grid two" style="margin-top: 14px;">
+                  <div class="field">
+                    <div class="field-label">Logline / Premise</div>
+                    <textarea
+                      name="premise"
+                      class="ta-md"
+                      placeholder="In one sentence, what is your story about?"
+                    ></textarea>
+                  </div>
+
+                  <div class="field">
+                    <div class="field-label">Theme</div>
+                    <textarea
+                      name="theme"
+                      class="ta-md"
+                      placeholder="What truth will the story explore?"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-controls">
+            <a class="secondary" id="prev-step" data-href="index.html" href="index.html">Back</a>
+            <a class="primary" id="next-step" data-href="story-strands.html" href="story-strands.html">Next Step</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
