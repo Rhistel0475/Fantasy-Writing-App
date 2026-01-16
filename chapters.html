@@ -122,6 +122,48 @@
                 </div>
               </div>
             </div>
+            <div class="grid two">
+              <label>
+                Chapter Count Target
+                <input
+                  name="chapterCount"
+                  type="number"
+                  data-required="true"
+                  placeholder="45"
+                />
+              </label>
+
+              <label>
+                Average Word Count
+                <input
+                  name="chapterWords"
+                  type="number"
+                  placeholder="3500"
+                />
+              </label>
+            </div>
+
+            <label>
+              Chapter Notes
+              <textarea
+                name="chapterNotes"
+                placeholder="Outline chapter goals, POV shifts, or research."
+                rows="4"
+              ></textarea>
+            </label>
+
+            <div class="ai-section"
+              data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing."
+            >
+              <div class="ai-header">
+                <div>
+                  <h3>AI Guidance</h3>
+                  <p>Ask for chapter pacing recommendations.</p>
+                </div>
+                <button class="secondary" data-ai="generate">Generate Prompt</button>
+              </div>
+            </div>
+            <div class="ai-output" data-ai-output></div>
           </div>
 
           <div class="wizard-controls">
