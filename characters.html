@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crucible Writer - Characters</title>
+    <link rel="stylesheet" href="styles.css?v=2" />
+  </head>
+
+  <body>
+    <div class="app show-wizard" id="app-root">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">The Crucible Writing System</p>
+          <h1>Crucible Writer</h1>
+          <p class="subhead">
+            Walk through every beat of your fantasy novel with structured prompts,
+            strand tracking, and AI-ready guidance.
+          </p>
+        </div>
+
+        <div class="status-card">
+          <div class="status-row">
+            <span>Current phase</span>
+            <select id="project-phase" name="projectPhase">
+              <option value="Planning">Planning</option>
+              <option value="Outlining">Outlining</option>
+              <option value="Drafting">Drafting</option>
+              <option value="Editing">Editing</option>
+            </select>
+          </div>
+
+          <div class="status-row">
+            <span>Completion</span>
+            <div class="progress">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span id="progress-value">0%</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="sidebar">
+          <h2>Crucible Path</h2>
+          <nav>
+            <a class="nav-item" data-step="0" href="project-forge.html">1. Project Forge</a>
+            <a class="nav-item" data-step="1" href="story-strands.html">2. Story Strands</a>
+            <a class="nav-item" data-step="2" href="beat-map.html">3. 36-Beat Map</a>
+            <a class="nav-item" data-step="3" href="forge-points.html">4. Forge Points</a>
+            <a class="nav-item" data-step="4" href="planning-docs.html">5. Planning Docs</a>
+            <a class="nav-item active" data-step="5" href="characters.html">6. Characters</a>
+            <a class="nav-item" data-step="6" href="mercy-engine.html">7. Mercy Engine</a>
+            <a class="nav-item" data-step="7" href="chapters.html">8. Chapters</a>
+            <a class="nav-item" data-step="8" href="export-backup.html">9. Export & Backup</a>
+          </nav>
+
+          <div class="tip-card">
+            <h3>Forge Tips</h3>
+            <ul>
+              <li>Keep all three strands visible in every movement.</li>
+              <li>Plant mercy early to pay it off at the forge points.</li>
+              <li>Use the Dark Mirror to echo your hero’s flaw.</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="content">
+          <div class="step-alert" id="step-alert" role="alert"></div>
+
+          <div class="step active" data-step="5">
+            <h2>Character Management</h2>
+            <p>Track the cast, their arcs, and relational tensions.</p>
+
+            <div class="grid two">
+              <div class="character-card">
+                <h3>Protagonist</h3>
+                <label>
+                  Name &amp; Role
+                  <input
+                    name="protagonistName"
+                    data-required="true"
+                    placeholder="Hero name and title"
+                  />
+                </label>
+                <label>
+                  Arc Summary
+                  <textarea
+                    name="protagonistArc"
+                    rows="3"
+                    placeholder="How the hero transforms across the Crucible."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="character-card">
+                <h3>Dark Mirror</h3>
+                <label>
+                  Antagonist Name
+                  <input
+                    name="antagonistName"
+                    data-required="true"
+                    placeholder="Shadow counterpart"
+                  />
+                </label>
+                <label>
+                  Mirror Traits
+                  <textarea
+                    name="antagonistTraits"
+                    rows="3"
+                    placeholder="How does the antagonist reflect the hero's flaw?"
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="character-card">
+                <h3>Constellation Cast</h3>
+                <label>
+                  Core Allies &amp; Rivals
+                  <textarea
+                    name="constellationCast"
+                    data-required="true"
+                    rows="3"
+                    placeholder="List the key characters and roles."
+                  ></textarea>
+                </label>
+                <label>
+                  Relationship Shifts
+                  <textarea
+                    name="relationshipShifts"
+                    rows="3"
+                    placeholder="How do bonds evolve across the journey?"
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="character-card">
+                <h3>Character Tracking</h3>
+                <label>
+                  Character Roster
+                  <textarea
+                    name="characterRoster"
+                    rows="3"
+                    placeholder="Track arcs, status, and chapter presence."
+                  ></textarea>
+                </label>
+                <label>
+                  Notes
+                  <textarea
+                    name="characterNotes"
+                    rows="3"
+                    placeholder="Growth markers, POV plans, or unresolved tensions."
+                  ></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-section"
+              data-prompt="Protagonist: {protagonistName}. Antagonist: {antagonistName}. Constellation cast: {constellationCast}. Suggest 3 relationship conflicts that press on the hero's fire strand."
+            >
+              <div class="ai-header">
+                <div>
+                  <h3>AI Guidance</h3>
+                  <p>Pressure-test character dynamics.</p>
+                </div>
+                <button class="secondary" data-ai="generate">Generate Prompt</button>
+              </div>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="wizard-controls">
+            <a class="secondary" id="prev-step" data-href="planning-docs.html" href="planning-docs.html">Back</a>
+            <a class="primary" id="next-step" data-href="mercy-engine.html" href="mercy-engine.html">Next Step</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
