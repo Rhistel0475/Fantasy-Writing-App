@@ -470,6 +470,39 @@ function validateStep(stepIndex) {
   return true;
 }
 
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   let project = loadProject();
 
