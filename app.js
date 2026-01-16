@@ -551,6 +551,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Begin Journey button
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn) {
+    beginBtn.addEventListener("click", () => {
+      const appRoot = qs("#app-root");
+      if (appRoot) {
+        appRoot.classList.remove("is-hero");
+        appRoot.classList.add("show-wizard");
+      }
+      showStep(0);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
   // Start at first existing step (usually 0)
   const order = getExistingStepOrder();
   showStep(order.length ? order[0] : 0);
