@@ -371,6 +371,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Sidebar nav buttons
   qsa(".nav-item").forEach((btn) => {
+    if (btn.tagName === "A" && btn.getAttribute("href")) {
+      return;
+    }
+
     btn.addEventListener("click", () => {
       const idx = Number(btn.getAttribute("data-step") || "0");
       const order = getExistingStepOrder();
@@ -412,8 +416,47 @@ document.addEventListener("DOMContentLoaded", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  if (prevBtn) prevBtn.addEventListener("click", () => goRelative(-1));
-  if (nextBtn) nextBtn.addEventListener("click", () => goRelative(1));
+  function handleStepNav(btn, delta) {
+    if (!btn) return;
+    btn.addEventListener("click", (event) => {
+      const href = btn.getAttribute("data-href");
+      if (href) {
+        if (delta > 0 && !validateStep(getActiveStepIndex())) {
+          event.preventDefault();
+          return;
+        }
+        window.location.href = href;
+        return;
+      }
+      goRelative(delta);
+    });
+  }
+
+  handleStepNav(prevBtn, -1);
+  handleStepNav(nextBtn, 1);
+
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn && !beginBtn.getAttribute("href")) {
+  if (beginBtn) {
+    beginBtn.addEventListener("click", () => {
+      showStep(0);
+    });
+  }
+
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn) {
+    beginBtn.addEventListener("click", () => {
+      const appRoot = qs("#app-root");
+      if (appRoot) appRoot.classList.add("show-wizard");
+      showStep(0);
+      const layout = qs(".layout");
+      if (layout) {
+        layout.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }
 
   // AI Guidance (display prompt)
   qsa('[data-ai="generate"]').forEach((btn) => {
