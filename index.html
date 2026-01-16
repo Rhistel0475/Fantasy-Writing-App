@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Crucible Writer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=2" />
   </head>
 
@@ -16,7 +19,7 @@
           <p class="eyebrow">The Crucible Writing System</p>
           <h2>Crucible Path</h2>
         </div>
-        <nav>
+        <nav aria-label="Step navigation">
           <button class="nav-item active" data-step="0">1. Project Forge</button>
           <button class="nav-item" data-step="1">2. Story Strands</button>
           <button class="nav-item" data-step="2">3. 36-Beat Map</button>
@@ -81,12 +84,9 @@
           </header>
 
           <main class="content">
-          <div class="step-alert" id="step-alert" role="alert"></div>
+            <div class="step-alert" id="step-alert" role="alert" aria-live="polite"></div>
 
-        <section class="content">
-          <div class="step-alert" id="step-alert" role="alert"></div>
-
-          <!-- STEP 0 -->
+            <!-- STEP 0 -->
           <div class="step active" data-step="0">
             <h2>Project Forge</h2>
             <p>Set the foundation for your Crucible project.</p>
@@ -114,13 +114,14 @@
                     <span class="field-label">Author</span>
                     <input
                       name="author"
+                      data-required="true"
                       placeholder="Your name"
                     />
                   </label>
 
                   <label class="field">
                     <span class="field-label">Genre</span>
-                    <select name="genre">
+                    <select name="genre" data-required="true">
                       <option value="">Select a genre...</option>
                       <option>Epic Fantasy</option>
                       <option>Dark Fantasy</option>
@@ -139,7 +140,7 @@
                   <label class="field">
                     <span class="field-label">Target Word Count</span>
                     <input
-                      name="wordCount"
+                      name="targetWordCount"
                       type="number"
                       inputmode="numeric"
                       placeholder="90000"
@@ -181,7 +182,6 @@
                     <span class="field-label">Mercy Planted (Early)</span>
                     <input
                       name="mercyPlanted"
-                      data-required="true"
                       placeholder="Who receives mercy early?"
                     />
                   </label>
@@ -214,125 +214,7 @@
 
               <div class="card ai-card">
                 <div class="ai-section"
-                  data-prompt="Project: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Target words: {wordCount}. Suggest 3 strong story directions and 3 core conflicts that fit the Crucible system."
-                >
-                  <div class="ai-header">
-                    <div>
-                      <h3>AI Guidance</h3>
-                      <p>Get strong options for conflict + direction.</p>
-                    </div>
-                    <button class="secondary" data-ai="generate">Generate Prompt</button>
-                  </div>
-                </div>
-                <div class="ai-output" data-ai-output></div>
-              </div>
-            </div>
-
-                  <label class="field">
-                    <span class="field-label">Author</span>
-                    <input
-                      name="author"
-                      placeholder="Your name"
-                    />
-                  </label>
-
-                  <label class="field">
-                    <span class="field-label">Genre</span>
-                    <select name="genre">
-                      <option value="">Select a genre...</option>
-                      <option>Epic Fantasy</option>
-                      <option>Dark Fantasy</option>
-                      <option>Grimdark</option>
-                      <option>Urban Fantasy</option>
-                      <option>Romantasy</option>
-                      <option>Sword & Sorcery</option>
-                      <option>Mythic Fantasy</option>
-                      <option>Cozy Fantasy</option>
-                      <option>Progression Fantasy</option>
-                      <option>LitRPG</option>
-                      <option>Other</option>
-                    </select>
-                  </label>
-
-                  <label class="field">
-                    <span class="field-label">Target Word Count</span>
-                    <input
-                      name="wordCount"
-                      type="number"
-                      inputmode="numeric"
-                      placeholder="90000"
-                    />
-                    <span class="field-helper">Epic fantasy often lands between 120,000-180,000.</span>
-                  </label>
-                </div>
-
-                <div class="grid two">
-                  <label class="field">
-                    <span class="field-label">Logline / Premise</span>
-                    <textarea
-                      name="premise"
-                      placeholder="In one sentence, what is your story about?"
-                      rows="3"
-                    ></textarea>
-                  </label>
-
-                  <label class="field">
-                    <span class="field-label">Theme</span>
-                    <textarea
-                      name="theme"
-                      placeholder="What truth will the story explore?"
-                      rows="3"
-                    ></textarea>
-                  </label>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-header">
-                  <div>
-                    <h3>Mercy Engine</h3>
-                    <p class="muted">Plant early compassion to pay it off at the forge points.</p>
-                  </div>
-                </div>
-                <div class="grid two">
-                  <label class="field">
-                    <span class="field-label">Mercy Planted (Early)</span>
-                    <input
-                      name="mercyPlanted"
-                      data-required="true"
-                      placeholder="Who receives mercy early?"
-                    />
-                  </label>
-
-                  <label class="field">
-                    <span class="field-label">Mercy Brewing</span>
-                    <input
-                      name="mercyBrewing"
-                      placeholder="How does it echo?"
-                    />
-                  </label>
-
-                  <label class="field">
-                    <span class="field-label">Mercy Paid Off</span>
-                    <input
-                      name="mercyPaid"
-                      placeholder="When does it return?"
-                    />
-                  </label>
-
-                  <label class="field">
-                    <span class="field-label">Mercy Notes</span>
-                    <input
-                      name="mercyNotes"
-                      placeholder="Optional: why does this matter?"
-                    />
-                  </label>
-                </div>
-              </div>
-
-              <div class="card ai-card">
-                <div class="ai-section"
-                  data-prompt="Project: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Target words: {wordCount}. Suggest 3 strong story directions and 3 core conflicts that fit the Crucible system."
+                  data-prompt="Project: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Target words: {targetWordCount}. Suggest 3 strong story directions and 3 core conflicts that fit the Crucible system."
                 >
                   <div class="ai-header">
                     <div>
@@ -1833,7 +1715,6 @@
                 <input
                   name="chapterCount"
                   type="number"
-                  data-required="true"
                   placeholder="45"
                 />
               </label>
@@ -1874,17 +1755,19 @@
           <!-- STEP 8 -->
           <div class="step" data-step="8">
             <h2>Export & Backup</h2>
-            <p>Export your Crucible project as JSON for safekeeping.</p>
+            <p>Export your Crucible project as JSON for safekeeping, or import a previously saved project.</p>
 
             <div class="export-card">
               <button class="primary" id="export-json">Generate JSON</button>
               <button class="secondary" id="download-json">Download Backup</button>
+              <input type="file" id="import-file" accept=".json" style="display: none;" />
+              <button class="secondary" id="import-json">Import Backup</button>
             </div>
 
             <textarea id="export-output" rows="10" readonly></textarea>
 
             <div class="ai-section"
-              data-prompt="Summarize this Crucible project for a writing partner: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Mercy: {mercyPlanted} -> {mercyPaid}. Target words: {wordCount}."
+              data-prompt="Summarize this Crucible project for a writing partner: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Mercy: {mercyPlanted} -> {mercyPaid}. Target words: {targetWordCount}."
             >
               <div class="ai-header">
                 <div>
@@ -1897,9 +1780,9 @@
             <div class="ai-output" data-ai-output></div>
           </div>
 
-          <div class="wizard-controls">
-            <button class="secondary" id="prev-step">Back</button>
-            <button class="primary" id="next-step">Next Step</button>
+          <div class="wizard-controls" role="navigation" aria-label="Step controls">
+            <button class="secondary" id="prev-step" aria-label="Go to previous step">Back</button>
+            <button class="primary" id="next-step" aria-label="Go to next step">Next Step</button>
           </div>
         </main>
       </div>
