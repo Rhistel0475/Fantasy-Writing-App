@@ -8,277 +8,42 @@
   </head>
 
   <body>
-    <div class="app">
-      <header class="app-header">
-        <div>
-          <p class="eyebrow">The Crucible Writing System</p>
-          <h1>Crucible Writer</h1>
-          <p class="subhead">
-            Walk through every beat of your fantasy novel with structured prompts,
-            strand tracking, and AI-ready guidance.
+    <div class="app is-hero" id="app-root">
+      <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+          <div class="hero-emblem">
+            <div class="hero-orb">🔥</div>
+            <div class="hero-mark">✦</div>
+          </div>
+          <p class="hero-kicker">Writing System</p>
+          <h1 class="hero-title">The Crucible</h1>
+          <p class="hero-subtitle">Writing System</p>
+          <p class="hero-description">
+            A comprehensive narrative framework designed to guide fantasy authors
+            through the complete novel-writing journey with a
+            <span> 36-beat structure</span> and three interwoven story strands.
           </p>
+          <div class="hero-cards">
+            <div class="hero-card">
+              <div class="hero-icon hero-icon-quest">🗡️</div>
+              <h3>Quest Strand</h3>
+              <p>The external mission, burden, or objective driving the plot forward.</p>
+            </div>
+            <div class="hero-card">
+              <div class="hero-icon hero-icon-fire">🔥</div>
+              <h3>Fire Strand</h3>
+              <p>The protagonist's inner transformation, power, or curse.</p>
+            </div>
+            <div class="hero-card">
+              <div class="hero-icon hero-icon-constellation">✦</div>
+              <h3>Constellation Strand</h3>
+              <p>The web of bonds, alliances, and relationships.</p>
+            </div>
+          </div>
+          <a class="hero-cta" id="begin-journey" href="/chapters.html">Begin Your Journey →</a>
         </div>
-
-        <div class="status-card">
-          <div class="status-row">
-            <span>Current phase</span>
-            <select id="project-phase" name="projectPhase">
-              <option value="Planning">Planning</option>
-              <option value="Outlining">Outlining</option>
-              <option value="Drafting">Drafting</option>
-              <option value="Editing">Editing</option>
-            </select>
-          </div>
-
-          <div class="status-row">
-            <span>Completion</span>
-            <div class="progress">
-              <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <span id="progress-value">0%</span>
-          </div>
-        </div>
-      </header>
-
-      <main class="layout">
-        <aside class="sidebar">
-          <h2>Crucible Path</h2>
-          <nav>
-            <button class="nav-item active" data-step="0">1. Project Forge</button>
-            <button class="nav-item" data-step="1">2. Story Strands</button>
-            <button class="nav-item" data-step="2">3. 36-Beat Map</button>
-            <button class="nav-item" data-step="3">4. Forge Points</button>
-            <button class="nav-item" data-step="4">5. Planning Docs</button>
-            <button class="nav-item" data-step="5">6. Characters</button>
-            <button class="nav-item" data-step="6">7. Mercy Engine</button>
-            <button class="nav-item" data-step="7">8. Chapters</button>
-            <button class="nav-item" data-step="8">9. Export & Backup</button>
-          </nav>
-
-          <div class="tip-card">
-            <h3>Forge Tips</h3>
-            <ul>
-              <li>Keep all three strands visible in every movement.</li>
-              <li>Plant mercy early to pay it off at the forge points.</li>
-              <li>Use the Dark Mirror to echo your hero’s flaw.</li>
-            </ul>
-          </div>
-        </aside>
-
-        <section class="content">
-          <!-- STEP 0 -->
-          <div class="step active" data-step="0">
-            <h2>Project Forge</h2>
-            <p>Set the foundation for your Crucible project.</p>
-
-            <div class="grid two">
-              <label>
-                Project Title
-                <input
-                  name="title"
-                  data-required="true"
-                  placeholder="The Ember Crown"
-                />
-              </label>
-
-              <label>
-                Author
-                <input
-                  name="author"
-                  placeholder="Your name"
-                />
-              </label>
-
-              <label>
-                Genre
-                <select name="genre">
-                  <option value="">Select a genre...</option>
-                  <option>Epic Fantasy</option>
-                  <option>Dark Fantasy</option>
-                  <option>Grimdark</option>
-                  <option>Urban Fantasy</option>
-                  <option>Romantasy</option>
-                  <option>Sword & Sorcery</option>
-                  <option>Mythic Fantasy</option>
-                  <option>Cozy Fantasy</option>
-                  <option>Progression Fantasy</option>
-                  <option>LitRPG</option>
-                  <option>Other</option>
-                </select>
-              </label>
-
-              <label>
-                Target Word Count
-                <input
-                  name="wordCount"
-                  type="number"
-                  inputmode="numeric"
-                  placeholder="90000"
-                />
-              </label>
-            </div>
-
-            <div class="grid two">
-              <label>
-                Logline / Premise
-                <textarea
-                  name="premise"
-                  placeholder="In one sentence, what is your story about?"
-                  rows="3"
-                ></textarea>
-              </label>
-
-              <label>
-                Theme
-                <textarea
-                  name="theme"
-                  placeholder="What truth will the story explore?"
-                  rows="3"
-                ></textarea>
-              </label>
-            </div>
-
-            <div class="ai-section"
-              data-prompt="Project: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Target words: {wordCount}. Suggest 3 strong story directions and 3 core conflicts that fit the Crucible system."
-            >
-              <div>
-                <h3>AI Guidance</h3>
-                <p>Get strong options for conflict + direction.</p>
-              </div>
-              <button class="secondary" data-ai="generate">Generate Prompt</button>
-            </div>
-            <div class="ai-output" data-ai-output></div>
-          </div>
-
-          <!-- STEP 6 (Mercy Engine) -->
-          <div class="step" data-step="6">
-            <h2>Mercy Engine</h2>
-            <p>Plant mercy early, let it echo, then pay it off later.</p>
-
-            <div class="grid two">
-              <label>
-                Mercy Planted (Early)
-                <input
-                  name="mercyPlanted"
-                  data-required="true"
-                  placeholder="Who receives mercy early?"
-                />
-              </label>
-
-              <label>
-                Mercy Brewing
-                <input
-                  name="mercyBrewing"
-                  placeholder="How does it echo?"
-                />
-              </label>
-
-              <label>
-                Mercy Paid Off
-                <input
-                  name="mercyPaid"
-                  placeholder="When does it return?"
-                />
-              </label>
-
-              <label>
-                Mercy Notes
-                <input
-                  name="mercyNotes"
-                  placeholder="Optional: why does this matter?"
-                />
-              </label>
-            </div>
-
-            <div class="ai-section"
-              data-prompt="Mercy planted: {mercyPlanted}. Brewing: {mercyBrewing}. Paid off: {mercyPaid}. Notes: {mercyNotes}. Suggest a beat that links this mercy payoff to a forge point, and propose 2 alternative payoffs."
-            >
-              <div>
-                <h3>AI Guidance</h3>
-                <p>Make your mercy payoff land at a forge point.</p>
-              </div>
-              <button class="secondary" data-ai="generate">Generate Prompt</button>
-            </div>
-            <div class="ai-output" data-ai-output></div>
-          </div>
-
-          <!-- STEP 7 -->
-          <div class="step" data-step="7">
-            <h2>Chapter Outline</h2>
-            <p>Create a chapter path linked to beats.</p>
-
-            <div class="grid two">
-              <label>
-                Chapter Count Target
-                <input
-                  name="chapterCount"
-                  type="number"
-                  data-required="true"
-                  placeholder="45"
-                />
-              </label>
-
-              <label>
-                Average Word Count
-                <input
-                  name="chapterWords"
-                  type="number"
-                  placeholder="3500"
-                />
-              </label>
-            </div>
-
-            <label>
-              Chapter Notes
-              <textarea
-                name="chapterNotes"
-                placeholder="Outline chapter goals, POV shifts, or research."
-                rows="4"
-              ></textarea>
-            </label>
-
-            <div class="ai-section"
-              data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing."
-            >
-              <div>
-                <h3>AI Guidance</h3>
-                <p>Ask for chapter pacing recommendations.</p>
-              </div>
-              <button class="secondary" data-ai="generate">Generate Prompt</button>
-            </div>
-            <div class="ai-output" data-ai-output></div>
-          </div>
-
-          <!-- STEP 8 -->
-          <div class="step" data-step="8">
-            <h2>Export & Backup</h2>
-            <p>Export your Crucible project as JSON for safekeeping.</p>
-
-            <div class="export-card">
-              <button class="primary" id="export-json">Generate JSON</button>
-              <button class="secondary" id="download-json">Download Backup</button>
-            </div>
-
-            <textarea id="export-output" rows="10" readonly></textarea>
-
-            <div class="ai-section"
-              data-prompt="Summarize this Crucible project for a writing partner: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Mercy: {mercyPlanted} -> {mercyPaid}. Target words: {wordCount}."
-            >
-              <div>
-                <h3>AI Guidance</h3>
-                <p>Generate a shareable summary for collaborators.</p>
-              </div>
-              <button class="secondary" data-ai="generate">Generate Prompt</button>
-            </div>
-            <div class="ai-output" data-ai-output></div>
-          </div>
-
-          <div class="wizard-controls">
-            <button class="secondary" id="prev-step">Back</button>
-            <button class="primary" id="next-step">Next Step</button>
-          </div>
-        </section>
-      </main>
+      </section>
     </div>
 
     <script src="app.js"></script>
