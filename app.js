@@ -338,6 +338,39 @@ function validateStep(stepIndex) {
   return true;
 }
 
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   let project = loadProject();
 
@@ -435,10 +468,17 @@ document.addEventListener("DOMContentLoaded", () => {
   handleStepNav(prevBtn, -1);
   handleStepNav(nextBtn, 1);
 
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn && !beginBtn.getAttribute("href")) {
+    beginBtn.addEventListener("click", () => {
+      showStep(0);
+    });
+  }
+
   // AI Guidance (display prompt)
   qsa('[data-ai="generate"]').forEach((btn) => {
     btn.addEventListener("click", () => {
-      const section = btn.closest(".ai-section");
+      const section = btn.closest(".ai-section, .ai-block");
       if (!section) return;
 
       // Refresh project from fields right before generating
@@ -453,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const template = section.getAttribute("data-prompt") || "";
       const prompt = fillTemplate(template, project);
 
-      const output = section.parentElement.querySelector("[data-ai-output]");
+      const output = section.querySelector("[data-ai-output]");
       if (output) output.textContent = prompt;
     });
   });

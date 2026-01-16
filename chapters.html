@@ -72,6 +72,56 @@
             <h2>Chapter Outline</h2>
             <p>Create a chapter path linked to beats.</p>
 
+            <div class="page">
+              <div class="section">
+                <h3 class="section-title">Chapter Plan</h3>
+                <p class="section-subtitle">Outline pacing targets before drafting.</p>
+
+                <div class="form-grid two">
+                  <div class="field">
+                    <div class="field-label">Chapter Count Target</div>
+                    <input
+                      name="chapterCount"
+                      type="number"
+                      data-required="true"
+                      placeholder="45"
+                    />
+                  </div>
+
+                  <div class="field">
+                    <div class="field-label">Average Word Count</div>
+                    <input
+                      name="chapterWords"
+                      type="number"
+                      placeholder="3500"
+                    />
+                  </div>
+                </div>
+
+                <div class="field" style="margin-top: 14px;">
+                  <div class="field-label">Chapter Notes</div>
+                  <textarea
+                    name="chapterNotes"
+                    class="ta-md"
+                    placeholder="Outline chapter goals, POV shifts, or research."
+                  ></textarea>
+                </div>
+
+                <div
+                  class="ai-block"
+                  data-prompt="We plan for {chapterCount} chapters at ~{chapterWords} words. Notes: {chapterNotes}. Suggest a chapter-to-beat mapping strategy for pacing."
+                >
+                  <div class="ai-block-top">
+                    <div>
+                      <h3>AI Guidance</h3>
+                      <p>Ask for chapter pacing recommendations.</p>
+                    </div>
+                    <button class="secondary" data-ai="generate">Generate Prompt</button>
+                  </div>
+                  <div class="ai-output" data-ai-output></div>
+                </div>
+              </div>
+            </div>
             <div class="grid two">
               <label>
                 Chapter Count Target
