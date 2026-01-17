@@ -1,5 +1,9 @@
 const STORAGE_KEY = "crucible.project.v1";
 
+// Default values
+const DEFAULT_TARGET_WORD_COUNT = 90000;
+const DEFAULT_PROJECT_PHASE = "Planning";
+
 function safeParse(json, fallback) {
   try {
     return JSON.parse(json);
@@ -10,13 +14,13 @@ function safeParse(json, fallback) {
 
 function getDefaultProject() {
   return {
-    projectPhase: "Planning",
+    projectPhase: DEFAULT_PROJECT_PHASE,
 
     // Project Forge
     author: "",
     title: "",
     genre: "",
-    targetWordCount: 90000,
+    targetWordCount: DEFAULT_TARGET_WORD_COUNT,
     premise: "",
     theme: "",
 
@@ -90,20 +94,11 @@ function getDefaultProject() {
 
 /**
  * Legacy migrations:
- * - wordCount -> targetWordCount
  * - mercy.early -> mercyPlanted (if older nested structure exists)
  * - keep mercyPlanted as the canonical "early mercy" field
  */
 function migrateProject(p) {
   const out = { ...p };
-
-  // wordCount -> targetWordCount
-  if (
-    (out.targetWordCount === undefined || out.targetWordCount === null || out.targetWordCount === "") &&
-    (out.wordCount !== undefined && out.wordCount !== null && String(out.wordCount).trim() !== "")
-  ) {
-    out.targetWordCount = out.wordCount;
-  }
 
   // mercy.early -> mercyPlanted
   if (
@@ -119,18 +114,46 @@ function migrateProject(p) {
 }
 
 function loadProject() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  const p = raw ? safeParse(raw, null) : null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const p = raw ? safeParse(raw, null) : null;
 
-  if (p && typeof p === "object") {
-    const migrated = migrateProject(p);
-    return { ...getDefaultProject(), ...migrated };
+    if (p && typeof p === "object") {
+      const migrated = migrateProject(p);
+      return { ...getDefaultProject(), ...migrated };
+    }
+    return getDefaultProject();
+  } catch (err) {
+    console.error("Failed to load project from localStorage:", err);
+    showStorageError("Unable to load saved project. Your browser's storage may be disabled.");
+    return getDefaultProject();
   }
-  return getDefaultProject();
 }
 
 function saveProject(project) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+  } catch (err) {
+    console.error("Failed to save project to localStorage:", err);
+    if (err.name === "QuotaExceededError") {
+      showStorageError("Storage quota exceeded! Your changes may not be saved. Try exporting your project as a backup.");
+    } else {
+      showStorageError("Unable to save changes. Your browser's storage may be disabled or full.");
+    }
+  }
+}
+
+function showStorageError(message) {
+  const alert = qs("#step-alert");
+  if (alert) {
+    alert.textContent = message;
+    alert.classList.add("visible");
+    alert.style.backgroundColor = "#dc2626";
+    alert.style.color = "#fff";
+  } else {
+    // Fallback if alert element doesn't exist
+    alert(message);
+  }
 }
 
 function qs(sel, root = document) {
@@ -237,7 +260,15 @@ function showStep(stepIndex) {
   const stepEl = qs(`.step[data-step="${stepIndex}"]`);
   const navEl = qs(`.nav-item[data-step="${stepIndex}"]`);
 
-  if (stepEl) stepEl.classList.add("active");
+  if (stepEl) {
+    stepEl.classList.add("active");
+    // Focus management for accessibility
+    const heading = stepEl.querySelector("h2");
+    if (heading) {
+      heading.setAttribute("tabindex", "-1");
+      heading.focus();
+    }
+  }
   if (navEl) navEl.classList.add("active");
 
   const alert = qs("#step-alert");
@@ -258,11 +289,185 @@ function getExistingStepOrder() {
     .sort((a, b) => a - b);
 }
 
+function sanitizeText(text) {
+  // Basic HTML entity encoding to prevent XSS
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 function fillTemplate(template, project) {
   return template.replace(/\{(\w+)\}/g, (_, key) => {
     const v = project[key];
-    return v === undefined || v === null ? "" : String(v);
+    if (v === undefined || v === null) return "";
+    // Sanitize the value to prevent any XSS attempts
+    return sanitizeText(String(v));
   });
+}
+
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
+}
+
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
+}
+
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
+}
+
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
+}
+
+function validateStep(stepIndex) {
+  const stepEl = qs(`.step[data-step="${stepIndex}"]`);
+  if (!stepEl) return true;
+
+  const required = qsa('[data-required="true"]', stepEl);
+  let firstInvalid = null;
+
+  required.forEach((el) => {
+    const value = getFieldValue(el).toString().trim();
+    const isValid = value.length > 0;
+    el.classList.toggle("is-invalid", !isValid);
+    if (!isValid && !firstInvalid) firstInvalid = el;
+  });
+
+  const alert = qs("#step-alert");
+  if (alert) {
+    if (firstInvalid) {
+      alert.textContent = "Complete the required fields before moving to the next step.";
+      alert.classList.add("visible");
+    } else {
+      alert.textContent = "";
+      alert.classList.remove("visible");
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus({ preventScroll: true });
+    firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+  return true;
 }
 
 function validateStep(stepIndex) {
@@ -304,7 +509,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Phase selector
   const phaseSelect = qs("#project-phase");
   if (phaseSelect) {
-    phaseSelect.value = project.projectPhase || "Planning";
+    phaseSelect.value = project.projectPhase || DEFAULT_PROJECT_PHASE;
     phaseSelect.addEventListener("change", () => {
       project.projectPhase = phaseSelect.value;
       saveProject(project);
@@ -313,11 +518,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Populate all fields from storage
   getAllFields().forEach((el) => {
-    // Support legacy name="wordCount" if your HTML still uses it
-    if (el.name === "wordCount" && project.targetWordCount !== undefined) {
-      setFieldValue(el, project.targetWordCount);
-      return;
-    }
     setFieldValue(el, project[el.name]);
   });
 
@@ -327,8 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
   getAllFields().forEach((el) => {
     const evt = el.tagName === "SELECT" ? "change" : "input";
     el.addEventListener(evt, () => {
-      const key = el.name === "wordCount" ? "targetWordCount" : el.name;
-      project[key] = getFieldValue(el);
+      project[el.name] = getFieldValue(el);
       saveProject(project);
       updateProgressUI(project);
       el.classList.remove("is-invalid");
@@ -410,6 +609,11 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.assign(href);
         return;
       }
+        window.location.href = href;
+        return;
+      }
+  if (beginBtn && !beginBtn.getAttribute("href")) {
+    beginBtn.addEventListener("click", () => {
       showStep(0);
     });
   }
@@ -422,8 +626,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Refresh project from fields right before generating
       getAllFields().forEach((el) => {
-        const key = el.name === "wordCount" ? "targetWordCount" : el.name;
-        project[key] = getFieldValue(el);
+        project[el.name] = getFieldValue(el);
       });
       if (phaseSelect) project.projectPhase = phaseSelect.value;
 
@@ -445,8 +648,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getProjectSnapshot() {
     getAllFields().forEach((el) => {
-      const key = el.name === "wordCount" ? "targetWordCount" : el.name;
-      project[key] = getFieldValue(el);
+      project[el.name] = getFieldValue(el);
     });
     if (phaseSelect) project.projectPhase = phaseSelect.value;
     saveProject(project);
@@ -475,6 +677,94 @@ document.addEventListener("DOMContentLoaded", () => {
       a.remove();
 
       URL.revokeObjectURL(url);
+    });
+  }
+
+  // Import JSON
+  const importBtn = qs("#import-json");
+  const importFile = qs("#import-file");
+
+  if (importBtn && importFile) {
+    importBtn.addEventListener("click", () => {
+      importFile.click();
+    });
+
+    importFile.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const imported = safeParse(event.target.result, null);
+          if (!imported || typeof imported !== "object") {
+            alert("Invalid JSON file. Please select a valid project backup.");
+            return;
+          }
+
+          // Confirm before overwriting
+          const confirmMsg = imported.title
+            ? `Import project "${imported.title}"? This will replace your current project.`
+            : "Import this project? This will replace your current project.";
+
+          if (!confirm(confirmMsg)) {
+            importFile.value = ""; // Reset file input
+            return;
+          }
+
+          // Merge with defaults and migrate
+          const migrated = migrateProject(imported);
+          project = { ...getDefaultProject(), ...migrated };
+
+          // Update all fields in UI
+          getAllFields().forEach((el) => {
+            setFieldValue(el, project[el.name]);
+          });
+
+          if (phaseSelect) {
+            phaseSelect.value = project.projectPhase || DEFAULT_PROJECT_PHASE;
+          }
+
+          // Save and update UI
+          saveProject(project);
+          updateProgressUI(project);
+
+          // Clear export output and show success
+          if (exportOut) exportOut.value = "";
+          alert("Project imported successfully!");
+
+          // Go to first step
+          const order = getExistingStepOrder();
+          showStep(order.length ? order[0] : 0);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (err) {
+          console.error("Import failed:", err);
+          alert("Failed to import project. Please check that the file is a valid JSON backup.");
+        } finally {
+          importFile.value = ""; // Reset file input
+        }
+      };
+
+      reader.onerror = () => {
+        alert("Failed to read file. Please try again.");
+        importFile.value = "";
+      };
+
+      reader.readAsText(file);
+    });
+  }
+
+  // Begin Journey button
+  const beginBtn = qs("#begin-journey");
+  if (beginBtn) {
+    beginBtn.addEventListener("click", () => {
+      const appRoot = qs("#app-root");
+      if (appRoot) {
+        appRoot.classList.remove("is-hero");
+        appRoot.classList.add("show-wizard");
+      }
+      showStep(0);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 
