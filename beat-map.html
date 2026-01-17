@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crucible Writer - 36-Beat Map</title>
+    <link rel="stylesheet" href="styles.css?v=2" />
+  </head>
+
+  <body>
+    <div class="app show-wizard" id="app-root">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">The Crucible Writing System</p>
+          <h1>Crucible Writer</h1>
+          <p class="subhead">
+            Walk through every beat of your fantasy novel with structured prompts,
+            strand tracking, and AI-ready guidance.
+          </p>
+        </div>
+
+        <div class="status-card">
+          <div class="status-row">
+            <span>Current phase</span>
+            <select id="project-phase" name="projectPhase">
+              <option value="Planning">Planning</option>
+              <option value="Outlining">Outlining</option>
+              <option value="Drafting">Drafting</option>
+              <option value="Editing">Editing</option>
+            </select>
+          </div>
+
+          <div class="status-row">
+            <span>Completion</span>
+            <div class="progress">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span id="progress-value">0%</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="sidebar">
+          <h2>Crucible Path</h2>
+          <nav>
+            <a class="nav-item" data-step="0" href="project-forge.html">1. Project Forge</a>
+            <a class="nav-item" data-step="1" href="story-strands.html">2. Story Strands</a>
+            <a class="nav-item active" data-step="2" href="beat-map.html">3. 36-Beat Map</a>
+            <a class="nav-item" data-step="3" href="forge-points.html">4. Forge Points</a>
+            <a class="nav-item" data-step="4" href="planning-docs.html">5. Planning Docs</a>
+            <a class="nav-item" data-step="5" href="characters.html">6. Characters</a>
+            <a class="nav-item" data-step="6" href="mercy-engine.html">7. Mercy Engine</a>
+            <a class="nav-item" data-step="7" href="chapters.html">8. Chapters</a>
+            <a class="nav-item" data-step="8" href="export-backup.html">9. Export & Backup</a>
+          </nav>
+
+          <div class="tip-card">
+            <h3>Forge Tips</h3>
+            <ul>
+              <li>Keep all three strands visible in every movement.</li>
+              <li>Plant mercy early to pay it off at the forge points.</li>
+              <li>Use the Dark Mirror to echo your hero’s flaw.</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section class="content">
+          <div class="step-alert" id="step-alert" role="alert"></div>
+
+          <div class="step active" data-step="2">
+            <h2>36-Beat Map</h2>
+            <p>Outline your six movements and highlight the critical beats.</p>
+
+            <div class="beats">
+              <div class="beat-card">
+                <h3>Ignition (Beats 1-6)</h3>
+                <p>Establish foundation and irreversible commitment.</p>
+                <label>
+                  Movement Summary
+                  <textarea
+                    name="ignitionSummary"
+                    data-required="true"
+                    rows="3"
+                    placeholder="Set the world, hero, and inciting spark."
+                  ></textarea>
+                </label>
+                <label>
+                  Crucible Beat Highlights
+                  <textarea
+                    name="ignitionBeats"
+                    rows="3"
+                    placeholder="Key beats, reveals, or shifts."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="beat-card">
+                <h3>First Tempering (Beats 7-11)</h3>
+                <p>Development through adversity.</p>
+                <label>
+                  Movement Summary
+                  <textarea
+                    name="firstTemperingSummary"
+                    data-required="true"
+                    rows="3"
+                    placeholder="How does adversity harden the hero?"
+                  ></textarea>
+                </label>
+                <label>
+                  Crucible Beat Highlights
+                  <textarea
+                    name="firstTemperingBeats"
+                    rows="3"
+                    placeholder="Trials, setbacks, or new costs."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="beat-card">
+                <h3>Scattering (Beats 12-18)</h3>
+                <p>Expansion and fragmentation.</p>
+                <label>
+                  Movement Summary
+                  <textarea
+                    name="scatteringSummary"
+                    data-required="true"
+                    rows="3"
+                    placeholder="How does the story widen or splinter?"
+                  ></textarea>
+                </label>
+                <label>
+                  Crucible Beat Highlights
+                  <textarea
+                    name="scatteringBeats"
+                    rows="3"
+                    placeholder="New threads, widening threats, or splintering allies."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="beat-card">
+                <h3>Brightest Burning (Beats 19-27)</h3>
+                <p>Mastery and convergence.</p>
+                <label>
+                  Movement Summary
+                  <textarea
+                    name="brightestBurningSummary"
+                    data-required="true"
+                    rows="3"
+                    placeholder="Where do strands converge into power?"
+                  ></textarea>
+                </label>
+                <label>
+                  Crucible Beat Highlights
+                  <textarea
+                    name="brightestBurningBeats"
+                    rows="3"
+                    placeholder="Breakthroughs, alliances, or major victories."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="beat-card">
+                <h3>Final Forging (Beats 28-33)</h3>
+                <p>Crisis and transcendence.</p>
+                <label>
+                  Movement Summary
+                  <textarea
+                    name="finalForgingSummary"
+                    data-required="true"
+                    rows="3"
+                    placeholder="The crucible of sacrifice before the finale."
+                  ></textarea>
+                </label>
+                <label>
+                  Crucible Beat Highlights
+                  <textarea
+                    name="finalForgingBeats"
+                    rows="3"
+                    placeholder="Deepest losses, hard choices, or desperate gambits."
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="beat-card">
+                <h3>Tempered Blade (Beats 34-36)</h3>
+                <p>Resolution and revelation.</p>
+                <label>
+                  Movement Summary
+                  <textarea
+                    name="temperedBladeSummary"
+                    data-required="true"
+                    rows="3"
+                    placeholder="How does the story resolve and reveal truth?"
+                  ></textarea>
+                </label>
+                <label>
+                  Crucible Beat Highlights
+                  <textarea
+                    name="temperedBladeBeats"
+                    rows="3"
+                    placeholder="Final revelation, aftermath, and future hint."
+                  ></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div class="ai-section"
+              data-prompt="Ignition: {ignitionSummary}. First Tempering: {firstTemperingSummary}. Scattering: {scatteringSummary}. Brightest Burning: {brightestBurningSummary}. Final Forging: {finalForgingSummary}. Tempered Blade: {temperedBladeSummary}. Suggest missing beats and pacing risks."
+            >
+              <div class="ai-header">
+                <div>
+                  <h3>AI Guidance</h3>
+                  <p>Spot pacing gaps or missing beats.</p>
+                </div>
+                <button class="secondary" data-ai="generate">Generate Prompt</button>
+              </div>
+            </div>
+            <div class="ai-output" data-ai-output></div>
+          </div>
+
+          <div class="wizard-controls">
+            <a class="secondary" id="prev-step" data-href="story-strands.html" href="story-strands.html">Back</a>
+            <a class="primary" id="next-step" data-href="forge-points.html" href="forge-points.html">Next Step</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
