@@ -66,6 +66,8 @@
         </aside>
 
         <section class="content">
+          <div class="step-alert" id="step-alert" role="alert"></div>
+
           <div class="step active" data-step="0">
             <h2>Project Forge</h2>
             <p>Set the foundation for your Crucible project.</p>
@@ -89,6 +91,35 @@
 
                   <div class="field">
                     <div class="field-label">Genre</div>
+            <div class="card-grid">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Basics</h3>
+                    <p class="muted">Capture the essentials before you start forging beats.</p>
+                  </div>
+                </div>
+                <div class="grid two">
+                  <label class="field">
+                    <span class="field-label">Project Title</span>
+                    <input
+                      name="title"
+                      data-required="true"
+                      placeholder="The Ember Crown"
+                    />
+                    <span class="field-helper">Use the working title you want to see on every page.</span>
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Author</span>
+                    <input
+                      name="author"
+                      placeholder="Your name"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Genre</span>
                     <select name="genre">
                       <option value="">Select a genre...</option>
                       <option>Epic Fantasy</option>
@@ -131,6 +162,97 @@
                     ></textarea>
                   </div>
                 </div>
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Target Word Count</span>
+                    <input
+                      name="wordCount"
+                      type="number"
+                      inputmode="numeric"
+                      placeholder="90000"
+                    />
+                    <span class="field-helper">Epic fantasy often lands between 120,000-180,000.</span>
+                  </label>
+                </div>
+
+                <div class="grid two">
+                  <label class="field">
+                    <span class="field-label">Logline / Premise</span>
+                    <textarea
+                      name="premise"
+                      placeholder="In one sentence, what is your story about?"
+                      rows="3"
+                    ></textarea>
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Theme</span>
+                    <textarea
+                      name="theme"
+                      placeholder="What truth will the story explore?"
+                      rows="3"
+                    ></textarea>
+                  </label>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Mercy Engine</h3>
+                    <p class="muted">Plant early compassion to pay it off at the forge points.</p>
+                  </div>
+                </div>
+                <div class="grid two">
+                  <label class="field">
+                    <span class="field-label">Mercy Planted (Early)</span>
+                    <input
+                      name="mercyPlanted"
+                      data-required="true"
+                      placeholder="Who receives mercy early?"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Mercy Brewing</span>
+                    <input
+                      name="mercyBrewing"
+                      placeholder="How does it echo?"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Mercy Paid Off</span>
+                    <input
+                      name="mercyPaid"
+                      placeholder="When does it return?"
+                    />
+                  </label>
+
+                  <label class="field">
+                    <span class="field-label">Mercy Notes</span>
+                    <input
+                      name="mercyNotes"
+                      placeholder="Optional: why does this matter?"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div class="card ai-card">
+                <div class="ai-section"
+                  data-prompt="Project: {title} by {author}. Genre: {genre}. Premise: {premise}. Theme: {theme}. Target words: {wordCount}. Suggest 3 strong story directions and 3 core conflicts that fit the Crucible system."
+                >
+                  <div class="ai-header">
+                    <div>
+                      <h3>AI Guidance</h3>
+                      <p>Get strong options for conflict + direction.</p>
+                    </div>
+                    <button class="secondary" data-ai="generate">Generate Prompt</button>
+                  </div>
+                </div>
+                <div class="ai-output" data-ai-output></div>
               </div>
             </div>
           </div>
