@@ -57,6 +57,44 @@ input, select, textarea, button{ font: inherit; }
 .hero{
   position: relative;
   min-height: 100%;
+  padding: clamp(32px, 6vh, 64px) 16px clamp(28px, 6vh, 52px);
+  text-align: center;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content{
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  max-width: 960px;
+  display: grid;
+  gap: clamp(16px, 2vw, 22px);
+  justify-items: center;
+  padding: 12px 0;
+}
+
+}
+
+body.is-hero-body{
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.is-hero-body > *:not(.app){
+  display: none;
+}
+
+a{ color: inherit; }
+
+input, select, textarea, button{ font: inherit; }
+
+/* --- Hero --- */
+.hero{
+  position: relative;
+  min-height: 100%;
   padding: 72px 16px 56px;
   text-align: center;
   isolation: isolate;
@@ -82,6 +120,105 @@ input, select, textarea, button{ font: inherit; }
   background:
     radial-gradient(circle at 50% 20%, rgba(255,180,90,0.20), transparent 55%),
     radial-gradient(circle at 50% 100%, rgba(10,12,22,0.9), transparent 60%);
+  filter: blur(8px);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-emblem{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-orb{
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  background: radial-gradient(circle at 30% 30%, #ffd18a, #ff8a27 60%, #ff4a55 100%);
+  box-shadow: 0 20px 50px rgba(255,120,40,0.4);
+}
+
+.hero-mark{
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #3b82f6;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 14px;
+}
+
+.hero-kicker{
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: var(--muted2);
+}
+
+.hero-title{
+  margin: 0;
+  font-size: clamp(2.1rem, 4.4vw, 3.9rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent1);
+  text-shadow: 0 6px 18px rgba(255, 177, 74, 0.2);
+}
+
+.hero-subtitle{
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #9aa3b2;
+}
+
+.hero-description{
+  margin: 0;
+  font-size: 16px;
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.hero-description span{
+  color: #f5b04c;
+}
+
+.hero-cards{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
+  max-width: 980px;
+  margin-top: 4px;
+}
+
+.hero-cards .hero-card:nth-child(n+4){
+  display: none;
+}
+
+.hero-card{
+  padding: 20px 18px;
+  border-radius: 18px;
+  background: rgba(20, 22, 30, 0.75);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+
   filter: blur(10px);
   opacity: 0.9;
   pointer-events: none;
@@ -218,6 +355,16 @@ input, select, textarea, button{ font: inherit; }
   color: #60a5fa;
 }
 
+}
+
+.hero-icon-fire{
+  color: #ff7a18;
+}
+
+.hero-icon-constellation{
+  color: #60a5fa;
+}
+
 .hero-cta{
   margin-top: 10px;
   padding: 16px 28px;
@@ -308,6 +455,18 @@ h1{
   margin: 0;
   max-width: 62ch;
   color: var(--muted2);
+}
+
+/* Status Card in header */
+.status-card{
+  width: 320px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+}
+
 }
 
 /* Status Card in header */
@@ -489,6 +648,99 @@ select:focus,
 textarea:focus{
   border-color: rgba(255,150,60,0.55);
   box-shadow: 0 0 0 3px rgba(255,150,60,0.14);
+}
+
+/* --- Grids --- */
+.grid{
+  display: grid;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.grid.two{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* --- AI Section --- */
+.ai-section{
+  margin-top: 14px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+
+  border-radius: var(--radius);
+  border: 1px solid rgba(249,115,22,0.25);
+  background: linear-gradient(180deg, rgba(249,115,22,0.12), rgba(249,115,22,0.06));
+  box-shadow: 0 10px 22px rgba(0,0,0,0.26);
+
+  padding: 16px;
+}
+
+.ai-section h3{ margin: 0 0 6px; }
+
+.ai-section p{
+  margin: 0;
+  color: rgba(255,255,255,0.72);
+}
+
+.ai-output{
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255,150,60,0.35);
+  background: rgba(255,255,255,0.03);
+  min-height: 44px;
+  white-space: pre-wrap;
+  color: rgba(255,255,255,0.80);
+}
+
+/* --- Buttons --- */
+button{
+  border: 0;
+  cursor: pointer;
+}
+
+.primary,
+.secondary{
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.primary{
+  background: linear-gradient(180deg, var(--accent1), var(--accent2));
+  color: #121212;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(255,140,40,0.18);
+}
+
+.primary:hover{ filter: brightness(1.03); }
+
+.secondary{
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.88);
+}
+
+.secondary:hover{ background: rgba(255,255,255,0.07); }
+
+/* --- Wizard controls --- */
+.wizard-controls{
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px 0 0;
+}
+
+.wizard-controls .secondary,
+.wizard-controls .primary{
+  min-width: 140px;
+}
+
+/* --- Export --- */
+.export-card{
+  display: flex;
 }
 
 /* --- Grids --- */
@@ -12034,6 +12286,53 @@ textarea.ta-lg { min-height: 220px; }
     flex-direction: column;
     align-items: stretch;
   }
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 6px;
+  color: rgba(241,245,249,0.92);
+  font-weight: 700;
+}
+
+details.crucible-collapse > summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapse-meta {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(241,245,249,0.55);
+}
+
+.collapse-body {
+  padding: 10px 4px 6px;
+}
+
+.ai-block h3 {
+  margin: 0 0 6px;
+}
+
+.ai-block p {
+  margin: 0;
+  color: rgba(255,255,255,0.72);
+}
+
+/* Optional: collapsible sections (Beat Map etc.) */
+details.crucible-collapse {
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  padding: 10px 12px;
+}
+
+details.crucible-collapse + details.crucible-collapse {
+  margin-top: 12px;
+}
+
+details.crucible-collapse > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
   padding: 8px 6px;
